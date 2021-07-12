@@ -294,28 +294,23 @@ If THRESHOLD if omitted, use 0.43 by default."
 
      ;; standard faces: faces.el
      `(default ((,display (:foreground ,(to-hex syntax-text-color) :background ,(to-hex syntax-background-color))))) ; editor.less atom-text-editor
-     `(shadow ((,display ()))) ; TODO: add face for shadow
+     `(shadow ((,display (,(to-hex text-color-subtle)))))
      `(link ((,display (:inherit underline :foreground ,(to-hex hue-1))))) ; base.less .syntax--markup.syntax--link, .syntax--markup.syntax--underline
      `(link-visited ((,display (:inherit link))))
      `(highlight ((,display (:background ,(to-hex background-color-highlight))))) ; text.less .highlight
      `(region ((,display (:background ,(to-hex syntax-selection-color))))) ; editor.less .region
      `(secondary-selection ((,display (:inherit region)))) ; editor.less .region
-     `(trailing-whitespace ((,display ()))) ; TODO: add face for trailing whitespace
+     `(trailing-whitespace ((,display (:underline ,(to-hex accent-color)))))
      `(line-number ((,display (:foreground ,(to-hex syntax-gutter-text-color))))) ; editor.less .gutter.line-number
      `(line-number-current-line ((,display (:foreground ,(to-hex syntax-gutter-text-color-selected))))) ; editor.less .gutter.cursor-line, .gutter.cursor-line-no-selection
-     `(line-number-major-tick ((,display ()))) ; TODO: add face for major tick in line number
-     `(line-number-minor-tick ((,display ()))) ; TODO: add face for minor tick in line number
-     `(fill-column-indicator ((,display ()))) ; TODO: add face for fill column indicator
+     `(fill-column-indicator ((,display (:foreground ,(to-hex syntax-wrap-guide-color))))) ; editor.less atom-text-editor.wrap-guide
      `(escape-glyph ((,display (:foreground ,(to-hex hue-4))))) ; base.less .syntax--constant.syntax-escape
-     `(homoglyph ((,display ()))) ; TODO: add face for homoglyph
-     `(nobreak-space ((,display ()))) ; TODO: add face for nobreak space
-     `(nobreak-hyphen ((,display ()))) ; TODO: add face for nobreak hyphen
      `(mode-line ((,display (:background ,(to-hex level-3-color))))) ; status-bar.less .status-bar
-     `(mode-line-inactive ((,display ()))) ; TODO: add face for inactive mode line
-     `(mode-line-highlight ((,display ()))) ; TODO: add face for highlighted mode line
-     `(mode-line-buffer-id ((,display ()))) ; TODO: add face for buffer id
-     `(header-line ((,display ()))) ; TODO: add face for header line
-     `(header-line-highlight ((,display ()))) ; TODO: add face for highlighted header line
+     `(mode-line-inactive ((,display (:foreground ,(to-hex tab-text-color))))) ; tabs.less .tab
+     `(mode-line-highlight ((,display (:background ,(to-hex level-3-color-hover))))) ; status-bar.less .status-bar.inline-block:hover
+     `(mode-line-buffer-id ((,display ())))
+     `(header-line ((,display (:foreground ,(to-hex text-color-subtle) :background ,(to-hex base-background-color))))) ; settings-view.less .settings-view.breadcrumb
+     `(header-line-highlight ((,display (:inherit header-line :underline t))))
      `(vertical-border ((,display (:inherit border))))
      `(window-divider ((,display (:inherit border))))
      `(window-divider-first-pixel ((,display (:inherit window-divider))))
@@ -327,31 +322,22 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(scroll-bar ((,display (:foreground ,(to-hex scrollbar-color))))) ; atom.less .scrollbars-visible-always ::-webkit-scrollbar-thumb
      `(border ((,display (:foreground ,(to-hex base-border-color))))) ; panes.less atom-pane-container atom-pane
      `(cursor ((,display (:background ,(to-hex syntax-cursor-color))))) ; editor.less .cursor
-     `(mouse ((,display ()))) ; TODO: add face for mouse
      `(tool-bar ((,display (:background-color ,(to-hex level-3-color))))) ; packages.less .tool-bar
      `(tab-bar ((,display (:foreground ,(to-hex tab-text-color) :background ,(to-hex tab-background-color))))) ; tabs.less .tab-bar, .tab
      `(tab-line ((,display (:inherit tab-bar)))) ; tabs.less .tab-bar
-     `(menu ((,display ()))) ; TODO: add face for menu
-     `(help-argument-name ((,display ()))) ; TODO: add face for help argument name
-     `(help-key-binding ((,display ()))) ; TODO: add face for help key binding
      `(glyphless-char ((,display (:foreground ,(to-hex syntax-invisible-character-color))))) ; editor.less atom-text-editor.invisible-character
      `(error ((,display (:foreground ,(to-hex text-color-error))))) ; text.less .text-error
      `(warning ((,display (:foreground ,(to-hex text-color-warning))))) ; text.less .text-warning
      `(success ((,display (:foreground ,(to-hex text-color-success))))) ; text.less .text-success
-     `(read-multiple-choice-face ((,display ()))) ; TODO: add face for read multiple choice
-     `(tty-menu-enabled-face ((,display ()))) ; TODO: add face for enabled tty menu
-     `(tty-menu-disabled-face ((,display ()))) ; TODO: add face for disabled tty menu
-     `(tty-menu-selected-face ((,display ()))) ; TODO: add face for selected tty menu
      `(show-paren-match ((,display (:underline ,(to-hex syntax-cursor-color))))) ; editor.less atom-text-editor.bracket-matcher.region
      `(show-paren-match-expression ((,display (:inherit show-paren-match))))
-     `(show-paren-mismatch ((,display ())))
+     `(show-paren-mismatch ((,display (:foreground ,(to-hex text-color-error)))))
 
      ;; search and replace faces: isearch.el, replace.el
-     `(isearch ((,display (:inherit lazy-highlight :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; TODO: add face for isearch
-     `(query-replace ((,display ()))) ; TODO: add face for query-replace
-     `(lazy-highlight ((,display (:background ,(to-hex syntax-result-marker-color))))) ; editor.less .find-result
+     `(isearch ((,display (:inherit lazy-highlight :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; editor.less atom-text-editor.current-result
+     `(lazy-highlight ((,display (:background ,(to-hex syntax-result-marker-color))))) ; editor.less atom-text-editor.find-result
 
-     ;; Font Lock Faces: https://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
+     ;; font lock faces: font-lock.el
      `(font-lock-warning-face ((,display (:inherit warning))))
      `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2))))) ; base.less .syntax--entity.syntax--function
      `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1))))) ; base.less .syntax--entity
