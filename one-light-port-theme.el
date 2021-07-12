@@ -62,8 +62,8 @@ If WEIGHT is not specified, default to 0.5."
   (let* ((digits (/ (length color) 3))
          (hex-max (- (expt 16.0 digits) 1))
          (subhex (lambda (pos) (substring color
-                                          (+ 1 (* digits pos))
-                                          (+ 1 (* digits (+ 1 pos)))))))
+                                     (+ 1 (* digits pos))
+                                     (+ 1 (* digits (+ 1 pos)))))))
     (apply 'color-rgb-to-hsl
            (mapcar (lambda (x) (/ (string-to-number x) hex-max))
                    (mapcar subhex '(0 1 2))))))
@@ -79,14 +79,18 @@ If THRESHOLD if omitted, use 0.43 by default."
 
 (cl-flet ((to-ratio (degree) (one-light-port--degree-to-ratio degree))
           (mix (c1 c2 &optional w) (one-light-port--mix c1 c2 w))
-          (darken (color ratio) (funcall (apply 'apply-partially 'color-darken-hsl color) (* ratio 100)))
-          (lighten (color ratio) (funcall (apply 'apply-partially 'color-lighten-hsl color) (* ratio 100)))
+          (darken (color ratio) (apply 'color-darken-hsl
+                                       (append color (list (* ratio 100)))))
+          (lighten (color ratio) (apply 'color-lighten-hsl
+                                        (append color (list (* ratio 100)))))
           (luma (color) (one-light-port--luma color))
-          (name-to-hsl (name) (apply 'color-rgb-to-hsl (color-name-to-rgb name)))
+          (name-to-hsl (name) (apply 'color-rgb-to-hsl
+                                     (color-name-to-rgb name)))
           (hsv-to-hsl (hsv) (one-light-port--color-hsv-to-hsl hsv))
           (hex-to-hsl (hex) (one-light-port--color-hex-to-hsl hex))
           (to-hex (hsl) (apply 'color-rgb-to-hex (apply 'color-hsl-to-rgb hsl)))
-          (contrast (color dark light &optional threshold) (one-light-port--color-contrast color dark light threshold))
+          (contrast (color dark light &optional threshold)
+                    (one-light-port--color-contrast color dark light threshold))
           (hue (hsl) (nth 0 hsl))
           (saturation (hsl) (nth 1 hsl))
           (lightness (hsl) (nth 2 hsl)))
@@ -210,13 +214,26 @@ If THRESHOLD if omitted, use 0.43 by default."
          ;; Accent (Custom)
          (accent-luma (luma `(,ui-hue 0.5 0.5))) ; get lightness of current hue
          ;; used for marker, inputs (smaller things)
-         (accent-color (mix (hsv-to-hsl `(,ui-hue 0.6 0.6)) `(,ui-hue 1 0.68) (* 2 accent-luma))) ; mix hsv + hsl (favor hsl for dark, hsv for light colors)
-         (accent-text-color (contrast accent-color `(,ui-hue 1 0.16) (hex-to-hsl "#fff") 0.4))
+         ;; mix hsv + hsl (favor hsl for dark, hsv for light colors)
+         (accent-color (mix (hsv-to-hsl `(,ui-hue 0.6 0.6))
+                            `(,ui-hue 1 0.68)
+                            (* 2 accent-luma)))
+         (accent-text-color (contrast accent-color
+                                      `(,ui-hue 1 0.16)
+                                      (hex-to-hsl "#fff")
+                                      0.4))
          ;; used for button, tooltip (larger things)
-         (accent-bg-color (mix (hsv-to-hsl `(,ui-hue 0.4 0.72)) `(,ui-hue 1 0.66) (* 2 accent-luma))) ; mix hsv + hsl (favor hsl for dark, hsv for light colors)
-         (accent-bg-text-color (contrast accent-bg-color `(,ui-hue 1 0.1) (hex-to-hsl "#fff") 0.4))
+         (accent-bg-color (mix (hsv-to-hsl `(,ui-hue 0.4 0.72))
+                               `(,ui-hue 1 0.66)
+                               (* 2 accent-luma)))
+         (accent-bg-text-color (contrast accent-bg-color
+                                         `(,ui-hue 1 0.1)
+                                         (hex-to-hsl "#fff")
+                                         0.4))
          ;; used for text only
-         (accent-only-text-color (mix (hsv-to-hsl `(,ui-hue 0.7 0.5)) `(,ui-hue 1 0.6) (* 2 accent-luma)))
+         (accent-only-text-color (mix (hsv-to-hsl `(,ui-hue 0.7 0.5))
+                                      `(,ui-hue 1 0.6)
+                                      (* 2 accent-luma)))
          ;; Components
          (pane-item-background-color base-background-color)
          (pane-item-border-color base-border-color)
@@ -252,9 +269,15 @@ If THRESHOLD if omitted, use 0.43 by default."
          (button-border-color-selected accent-color)
          (checkbox-background-color (mix accent-bg-color ui-bg 0.33))
          (input-background-color-focus `(,ui-hue 1 0.96))
-         (input-selection-color (mix (hsv-to-hsl `(,ui-hue 0.33 0.95)) `(,ui-hue 1 0.98) (* 2 accent-luma))) ; mix hsv + hsl (favor hsl for dark, hsv for light colors)
-         (input-selection-color-focus (mix (hsv-to-hsl `(,ui-hue 0.44 0.9)) `(,ui-hue 1 0.94) (* 2 accent-luma))) ; mix hsv + hsl (favor hsl for dark, hsv for light colors)
-         (overlay-backdrop-color `(,ui-hue ,(* 0.4 ui-saturation) ,(* 0.8 ui-lightness)))
+         (input-selection-color (mix (hsv-to-hsl `(,ui-hue 0.33 0.95))
+                                     `(,ui-hue 1 0.98)
+                                     (* 2 accent-luma))) ; mix hsv + hsl
+         (input-selection-color-focus (mix (hsv-to-hsl `(,ui-hue 0.44 0.9))
+                                           `(,ui-hue 1 0.94)
+                                           (* 2 accent-luma))) ; mix hsv + hsl
+         (overlay-backdrop-color `(,ui-hue
+                                   ,(* 0.4 ui-saturation)
+                                   ,(* 0.8 ui-lightness)))
          (overlay-backdrop-opacity 0.66)
          (progress-background-color accent-color)
          (scrollbar-color (darken level-3-color 0.14))
@@ -262,7 +285,9 @@ If THRESHOLD if omitted, use 0.43 by default."
          (scroll-bar-color-editor ui-syntax-color)
          (tab-text-color text-color-subtle)
          (tab-text-color-active text-color-highlight)
-         (tab-text-color-editor (contrast ui-syntax-color (lighten ui-syntax-color 0.7) text-color-highlight))
+         (tab-text-color-editor (contrast ui-syntax-color
+                                          (lighten ui-syntax-color 0.7)
+                                          text-color-highlight))
          (tab-inactive-status-added (mix text-color-success ui-bg 0.77))
          (tab-inactive-status-modified (mix text-color-warning ui-bg 0.77))
          (tooltip-background-color accent-bg-color)
@@ -294,25 +319,46 @@ If THRESHOLD if omitted, use 0.43 by default."
 
      ;; faces.el
      `(default ((,display (:foreground ,(to-hex syntax-text-color)
-                           :background ,(to-hex syntax-background-color))))) ; editor.less atom-text-editor
+                           :background ,(to-hex syntax-background-color)))))
+                                        ; editor.less: atom-text-editor
      `(shadow ((,display (,(to-hex text-color-subtle)))))
      `(link ((,display (:inherit underline
-                        :foreground ,(to-hex hue-1))))) ; base.less .syntax--markup.syntax--link, .syntax--markup.syntax--underline
+                        :foreground ,(to-hex hue-1)))))
+                                        ; base.less: .syntax--link,
+                                        ; .syntax--markup.syntax--underline
      `(link-visited ((,display (:inherit link))))
-     `(highlight ((,display (:background ,(to-hex background-color-highlight))))) ; text.less .highlight
-     `(region ((,display (:background ,(to-hex syntax-selection-color))))) ; editor.less .region
-     `(secondary-selection ((,display (:inherit region)))) ; editor.less .region
+     `(highlight ((,display
+                   (:background ,(to-hex background-color-highlight)))))
+                                        ; text.less: .highlight
+     `(region ((,display (:background ,(to-hex syntax-selection-color)))))
+                                        ; editor.less: .region
+     `(secondary-selection ((,display (:inherit region))))
+                                        ; editor.less: .region
      `(trailing-whitespace ((,display (:underline ,(to-hex accent-color)))))
-     `(line-number ((,display (:foreground ,(to-hex syntax-gutter-text-color))))) ; editor.less .gutter.line-number
-     `(line-number-current-line ((,display (:foreground ,(to-hex syntax-gutter-text-color-selected))))) ; editor.less .gutter.cursor-line, .gutter.cursor-line-no-selection
-     `(fill-column-indicator ((,display (:foreground ,(to-hex syntax-wrap-guide-color))))) ; editor.less atom-text-editor.wrap-guide
-     `(escape-glyph ((,display (:foreground ,(to-hex hue-4))))) ; base.less .syntax--constant.syntax-escape
-     `(mode-line ((,display (:background ,(to-hex level-3-color))))) ; status-bar.less .status-bar
-     `(mode-line-inactive ((,display (:foreground ,(to-hex tab-text-color))))) ; tabs.less .tab
-     `(mode-line-highlight ((,display (:background ,(to-hex level-3-color-hover))))) ; status-bar.less .status-bar.inline-block:hover
-     `(mode-line-buffer-id ((,display ())))
+     `(line-number
+       ((,display (:foreground ,(to-hex syntax-gutter-text-color)))))
+                                        ; editor.less: .gutter.line-number
+     `(line-number-current-line
+       ((,display (:foreground ,(to-hex syntax-gutter-text-color-selected)))))
+                                        ; editor.less: .gutter.cursor-line,
+                                        ; .gutter.cursor-line-no-selection
+     `(fill-column-indicator
+       ((,display (:foreground ,(to-hex syntax-wrap-guide-color)))))
+                                        ; editor.less: .wrap-guide
+     `(escape-glyph ((,display (:foreground ,(to-hex hue-4)))))
+                                        ; base.less: .syntax-escape
+     `(mode-line ((,display (:background ,(to-hex level-3-color)))))
+                                        ; status-bar.less: .status-bar
+     `(mode-line-inactive ((,display (:foreground ,(to-hex tab-text-color)))))
+                                        ; tabs.less: .tab
+     `(mode-line-highlight
+       ((,display (:background ,(to-hex level-3-color-hover)))))
+                                        ; status-bar.less:
+                                        ; .status-bar.inline-block:hover
+     `(mode-line-buffer-id ((,display (:inherit mode-line))))
      `(header-line ((,display (:foreground ,(to-hex text-color-subtle)
-                               :background ,(to-hex base-background-color))))) ; settings-view.less .settings-view.breadcrumb
+                               :background ,(to-hex base-background-color)))))
+                                        ; settings-view.less: .breadcrumb
      `(header-line-highlight ((,display (:inherit header-line :underline t))))
      `(vertical-border ((,display (:inherit border))))
      `(window-divider ((,display (:inherit border))))
@@ -320,63 +366,111 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(window-divider-last-pixel ((,display (:inherit window-divider))))
      `(internal-border ((,display (:inherit border))))
      `(child-frame-border ((,display (:inherit border))))
-     `(minibuffer-prompt ((,display (:foreground ,(to-hex text-color-highlight)
-                                     :background ,(to-hex input-background-color))))) ; editor.less atom-text-editor[mini]
+     `(minibuffer-prompt
+       ((,display (:foreground ,(to-hex text-color-highlight)
+                   :background ,(to-hex input-background-color)))))
+                                        ; editor.less: atom-text-editor[mini]
      `(fringe ((,display ())))
-     `(scroll-bar ((,display (:foreground ,(to-hex scrollbar-color))))) ; atom.less .scrollbars-visible-always ::-webkit-scrollbar-thumb
-     `(border ((,display (:foreground ,(to-hex base-border-color))))) ; panes.less atom-pane-container atom-pane
-     `(cursor ((,display (:background ,(to-hex syntax-cursor-color))))) ; editor.less .cursor
-     `(tool-bar ((,display (:background-color ,(to-hex level-3-color))))) ; packages.less .tool-bar
+     `(scroll-bar ((,display (:foreground ,(to-hex scrollbar-color)))))
+                                        ; atom.less: ::-webkit-scrollbar-thumb
+     `(border ((,display (:foreground ,(to-hex base-border-color)))))
+                                        ; panes.less: atom-pane
+     `(cursor ((,display (:background ,(to-hex syntax-cursor-color)))))
+                                        ; editor.less: .cursor
+     `(tool-bar ((,display (:background-color ,(to-hex level-3-color)))))
+                                        ; packages.less: .tool-bar
      `(tab-bar ((,display (:foreground ,(to-hex tab-text-color)
-                           :background ,(to-hex tab-background-color))))) ; tabs.less .tab-bar, .tab
-     `(tab-line ((,display (:inherit tab-bar)))) ; tabs.less .tab-bar
-     `(glyphless-char ((,display (:foreground ,(to-hex syntax-invisible-character-color))))) ; editor.less atom-text-editor.invisible-character
-     `(error ((,display (:foreground ,(to-hex text-color-error))))) ; text.less .text-error
-     `(warning ((,display (:foreground ,(to-hex text-color-warning))))) ; text.less .text-warning
-     `(success ((,display (:foreground ,(to-hex text-color-success))))) ; text.less .text-success
-     `(show-paren-match ((,display (:underline ,(to-hex syntax-cursor-color))))) ; editor.less atom-text-editor.bracket-matcher.region
+                           :background ,(to-hex tab-background-color)))))
+                                        ; tabs.less: .tab-bar, .tab
+     `(tab-line ((,display (:inherit tab-bar)))) ; tabs.less: .tab-bar
+     `(glyphless-char
+       ((,display (:foreground ,(to-hex syntax-invisible-character-color)))))
+                                        ; editor.less: .invisible-character
+     `(error ((,display (:foreground ,(to-hex text-color-error)))))
+                                        ; text.less: .text-error
+     `(warning ((,display (:foreground ,(to-hex text-color-warning)))))
+                                        ; text.less: .text-warning
+     `(success ((,display (:foreground ,(to-hex text-color-success)))))
+                                        ; text.less: .text-success
+     `(show-paren-match ((,display (:underline ,(to-hex syntax-cursor-color)))))
+                                        ; editor.less: .bracket-matcher.region
      `(show-paren-match-expression ((,display (:inherit show-paren-match))))
-     `(show-paren-mismatch ((,display (:foreground ,(to-hex text-color-error)))))
+     `(show-paren-mismatch
+       ((,display (:foreground ,(to-hex text-color-error)))))
 
      ;; isearch.el
-     `(isearch ((,display (:inherit lazy-highlight
-                           :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; editor.less atom-text-editor.current-result
-     `(lazy-highlight ((,display (:background ,(to-hex syntax-result-marker-color))))) ; editor.less atom-text-editor.find-result
+     `(isearch
+       ((,display
+         (:inherit lazy-highlight
+          :box (:line-width 2
+                :color ,(to-hex syntax-result-marker-color-selected))))))
+                                        ; editor.less: .current-result
+     `(lazy-highlight
+       ((,display (:background ,(to-hex syntax-result-marker-color)))))
+                                        ; editor.less: .find-result
 
      ;; font-lock.el
      `(font-lock-warning-face ((,display (:inherit warning))))
-     `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2))))) ; base.less .syntax--entity.syntax--function
-     `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1))))) ; base.less .syntax--entity
-     `(font-lock-keyword-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword
+     `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2)))))
+                                        ; base.less: .syntax--function
+     `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1)))))
+                                        ; base.less: .syntax--entity
+     `(font-lock-keyword-face ((,display (:foreground ,(to-hex hue-3)))))
+                                        ; base.less: .syntax--keyword
      `(font-lock-comment-face ((,display (:foreground ,(to-hex mono-3)
-                                          :slant italic)))) ; base.less .syntax--comment
-     `(font-lock-comment-delimiter-face ((,display (:inherit font-lock-comment-face))))
-     `(font-lock-type-face ((,display (:foreground ,(to-hex hue-1))))) ; base.less .syntax--entity.syntax--type
-     `(font-lock-constant-face ((,display (:foreground ,(to-hex hue-6))))) ; base.less .syntax--constant
-     `(font-lock-builtin-face ((,display (:foreground ,(to-hex hue-5))))) ; base.less .syntax--entity.syntax--function
-     `(font-lock-preprocessor-face ((,display (:inherit font-lock-keyword-face))))
-     `(font-lock-string-face ((,display (:foreground ,(to-hex hue-4))))) ; base.less .syntax--string
+                                          :slant italic))))
+                                        ; base.less: .syntax--comment
+     `(font-lock-comment-delimiter-face
+       ((,display (:inherit font-lock-comment-face))))
+     `(font-lock-type-face ((,display (:foreground ,(to-hex hue-1)))))
+                                        ; base.less: .syntax--type
+     `(font-lock-constant-face ((,display (:foreground ,(to-hex hue-6)))))
+                                        ; base.less: .syntax--constant
+     `(font-lock-builtin-face ((,display (:foreground ,(to-hex hue-5)))))
+                                        ; base.less: .syntax--function
+     `(font-lock-preprocessor-face
+       ((,display (:inherit font-lock-keyword-face))))
+     `(font-lock-string-face ((,display (:foreground ,(to-hex hue-4)))))
+                                        ; base.less: .syntax--string
      `(font-lock-doc-face ((,display (:inherit font-lock-comment-face))))
-     `(font-lock-negation-char-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword.syntax--operator
+     `(font-lock-negation-char-face ((,display (:foreground ,(to-hex hue-3)))))
+                                        ; base.less: .syntax--operator
 
      ;; company.el
-     `(company-tooltip ((,display (:foreground ,(to-hex text-color) ; autocomplete.less li
-                                   :background ,(to-hex overlay-background-color))))) ; lists.less .select-list.popover-list
-     `(company-tooltip-selection ((,display (:background ,(to-hex background-color-selected))))) ; lists.less li.selected
+     `(company-tooltip
+       ((,display (:foreground ,(to-hex text-color)
+                                        ; autocomplete.less: li
+                   :background ,(to-hex overlay-background-color)))))
+                                        ; lists.less: .select-list.popover-list
+     `(company-tooltip-selection
+       ((,display (:background ,(to-hex background-color-selected)))))
+                                        ; lists.less: li.selected
      `(company-tooltip-search ((,display (:inherit company-tooltip-common))))
-     `(company-tooltip-search-selection ((,display (:inherit company-tooltip-common-selection))))
+     `(company-tooltip-search-selection
+       ((,display (:inherit company-tooltip-common-selection))))
      `(company-tooltip-mouse ((,display (:inherit company-tooltip))))
-     `(company-tooltip-common ((,display (:foreground ,(to-hex text-color-highlight)
-                                          :weight bold)))) ; autocomplete.less .character-match
-     `(company-tooltip-common-selection ((,display (:foreground ,(to-hex text-color-selected) ; autocomplete.less li.selected.character-match
-                                                    :weight bold)))) ; autocomplete.less .character-match
-     `(company-tooltip-annotation ((,display (:inherit company-tooltip
-                                              :foreground ,(to-hex text-color-subtle))))) ; autocomplete.less .right-label
+     `(company-tooltip-common
+       ((,display (:foreground ,(to-hex text-color-highlight)
+                   :weight bold)))) ; autocomplete.less: .character-match
+     `(company-tooltip-common-selection
+       ((,display (:foreground ,(to-hex text-color-selected)
+                                        ; autocomplete.less:
+                                        ; li.selected.character-match
+                   :weight bold)))) ; autocomplete.less: .character-match
+     `(company-tooltip-annotation
+       ((,display (:inherit company-tooltip
+                   :foreground ,(to-hex text-color-subtle)))))
+                                        ; autocomplete.less: .right-label
      `(company-tooltip-annotation-selection
        ((,display (:inherit company-tooltip-selection
-                   :foreground ,(to-hex (mix text-color-selected overlay-backdrop-color)))))) ; autocomplete.less li.selected.right-label
-     `(company-scrollbar-fg ((,display (:background ,(to-hex scrollbar-color)))))
-     `(company-scrollbar-bg ((,display (:background ,(to-hex scrollbar-background-color)))))
+                   :foreground ,(to-hex (mix text-color-selected
+                                             overlay-backdrop-color))))))
+                                        ; autocomplete.less:
+                                        ; li.selected.right-label
+     `(company-scrollbar-fg
+       ((,display (:background ,(to-hex scrollbar-color)))))
+     `(company-scrollbar-bg
+       ((,display (:background ,(to-hex scrollbar-background-color)))))
      `(company-preview ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-preview-common ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-preview-search ((,display (:background "#ff0000")))) ; TODO: add face
