@@ -292,10 +292,12 @@ If THRESHOLD if omitted, use 0.43 by default."
     (custom-theme-set-faces
      'one-light-port
 
-     ;; standard faces: faces.el
-     `(default ((,display (:foreground ,(to-hex syntax-text-color) :background ,(to-hex syntax-background-color))))) ; editor.less atom-text-editor
+     ;; faces.el
+     `(default ((,display (:foreground ,(to-hex syntax-text-color)
+                           :background ,(to-hex syntax-background-color))))) ; editor.less atom-text-editor
      `(shadow ((,display (,(to-hex text-color-subtle)))))
-     `(link ((,display (:inherit underline :foreground ,(to-hex hue-1))))) ; base.less .syntax--markup.syntax--link, .syntax--markup.syntax--underline
+     `(link ((,display (:inherit underline
+                        :foreground ,(to-hex hue-1))))) ; base.less .syntax--markup.syntax--link, .syntax--markup.syntax--underline
      `(link-visited ((,display (:inherit link))))
      `(highlight ((,display (:background ,(to-hex background-color-highlight))))) ; text.less .highlight
      `(region ((,display (:background ,(to-hex syntax-selection-color))))) ; editor.less .region
@@ -309,7 +311,8 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(mode-line-inactive ((,display (:foreground ,(to-hex tab-text-color))))) ; tabs.less .tab
      `(mode-line-highlight ((,display (:background ,(to-hex level-3-color-hover))))) ; status-bar.less .status-bar.inline-block:hover
      `(mode-line-buffer-id ((,display ())))
-     `(header-line ((,display (:foreground ,(to-hex text-color-subtle) :background ,(to-hex base-background-color))))) ; settings-view.less .settings-view.breadcrumb
+     `(header-line ((,display (:foreground ,(to-hex text-color-subtle)
+                               :background ,(to-hex base-background-color))))) ; settings-view.less .settings-view.breadcrumb
      `(header-line-highlight ((,display (:inherit header-line :underline t))))
      `(vertical-border ((,display (:inherit border))))
      `(window-divider ((,display (:inherit border))))
@@ -317,13 +320,15 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(window-divider-last-pixel ((,display (:inherit window-divider))))
      `(internal-border ((,display (:inherit border))))
      `(child-frame-border ((,display (:inherit border))))
-     `(minibuffer-prompt ((,display (:foreground ,(to-hex text-color-highlight) :background ,(to-hex input-background-color))))) ; editor.less atom-text-editor[mini]
+     `(minibuffer-prompt ((,display (:foreground ,(to-hex text-color-highlight)
+                                     :background ,(to-hex input-background-color))))) ; editor.less atom-text-editor[mini]
      `(fringe ((,display ())))
      `(scroll-bar ((,display (:foreground ,(to-hex scrollbar-color))))) ; atom.less .scrollbars-visible-always ::-webkit-scrollbar-thumb
      `(border ((,display (:foreground ,(to-hex base-border-color))))) ; panes.less atom-pane-container atom-pane
      `(cursor ((,display (:background ,(to-hex syntax-cursor-color))))) ; editor.less .cursor
      `(tool-bar ((,display (:background-color ,(to-hex level-3-color))))) ; packages.less .tool-bar
-     `(tab-bar ((,display (:foreground ,(to-hex tab-text-color) :background ,(to-hex tab-background-color))))) ; tabs.less .tab-bar, .tab
+     `(tab-bar ((,display (:foreground ,(to-hex tab-text-color)
+                           :background ,(to-hex tab-background-color))))) ; tabs.less .tab-bar, .tab
      `(tab-line ((,display (:inherit tab-bar)))) ; tabs.less .tab-bar
      `(glyphless-char ((,display (:foreground ,(to-hex syntax-invisible-character-color))))) ; editor.less atom-text-editor.invisible-character
      `(error ((,display (:foreground ,(to-hex text-color-error))))) ; text.less .text-error
@@ -333,16 +338,18 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(show-paren-match-expression ((,display (:inherit show-paren-match))))
      `(show-paren-mismatch ((,display (:foreground ,(to-hex text-color-error)))))
 
-     ;; search and replace faces: isearch.el, replace.el
-     `(isearch ((,display (:inherit lazy-highlight :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; editor.less atom-text-editor.current-result
+     ;; isearch.el
+     `(isearch ((,display (:inherit lazy-highlight
+                           :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; editor.less atom-text-editor.current-result
      `(lazy-highlight ((,display (:background ,(to-hex syntax-result-marker-color))))) ; editor.less atom-text-editor.find-result
 
-     ;; font lock faces: font-lock.el
+     ;; font-lock.el
      `(font-lock-warning-face ((,display (:inherit warning))))
      `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2))))) ; base.less .syntax--entity.syntax--function
      `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1))))) ; base.less .syntax--entity
      `(font-lock-keyword-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword
-     `(font-lock-comment-face ((,display (:foreground ,(to-hex mono-3) :slant italic)))) ; base.less .syntax--comment
+     `(font-lock-comment-face ((,display (:foreground ,(to-hex mono-3)
+                                          :slant italic)))) ; base.less .syntax--comment
      `(font-lock-comment-delimiter-face ((,display (:inherit font-lock-comment-face))))
      `(font-lock-type-face ((,display (:foreground ,(to-hex hue-1))))) ; base.less .syntax--entity.syntax--type
      `(font-lock-constant-face ((,display (:foreground ,(to-hex hue-6))))) ; base.less .syntax--constant
@@ -351,6 +358,30 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(font-lock-string-face ((,display (:foreground ,(to-hex hue-4))))) ; base.less .syntax--string
      `(font-lock-doc-face ((,display (:inherit font-lock-comment-face))))
      `(font-lock-negation-char-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword.syntax--operator
+
+     ;; company.el
+     `(company-tooltip ((,display (:foreground ,(to-hex text-color) ; autocomplete.less li
+                                   :background ,(to-hex overlay-background-color))))) ; lists.less .select-list.popover-list
+     `(company-tooltip-selection ((,display (:background ,(to-hex background-color-selected))))) ; lists.less li.selected
+     `(company-tooltip-search ((,display (:inherit company-tooltip-common))))
+     `(company-tooltip-search-selection ((,display (:inherit company-tooltip-common-selection))))
+     `(company-tooltip-mouse ((,display (:inherit company-tooltip))))
+     `(company-tooltip-common ((,display (:foreground ,(to-hex text-color-highlight)
+                                          :weight bold)))) ; autocomplete.less .character-match
+     `(company-tooltip-common-selection ((,display (:foreground ,(to-hex text-color-selected) ; autocomplete.less li.selected.character-match
+                                                    :weight bold)))) ; autocomplete.less .character-match
+     `(company-tooltip-annotation ((,display (:inherit company-tooltip
+                                              :foreground ,(to-hex text-color-subtle))))) ; autocomplete.less .right-label
+     `(company-tooltip-annotation-selection
+       ((,display (:inherit company-tooltip-selection
+                   :foreground ,(to-hex (mix text-color-selected overlay-backdrop-color)))))) ; autocomplete.less li.selected.right-label
+     `(company-scrollbar-fg ((,display (:background ,(to-hex scrollbar-color)))))
+     `(company-scrollbar-bg ((,display (:background ,(to-hex scrollbar-background-color)))))
+     `(company-preview ((,display (:background "#ff0000")))) ; TODO: add face
+     `(company-preview-common ((,display (:background "#ff0000")))) ; TODO: add face
+     `(company-preview-search ((,display (:background "#ff0000")))) ; TODO: add face
+     `(company-echo nil ((,display (:background "#ff0000")))) ; TODO: add face
+     `(company-echo-common ((,display (:background "#ff0000")))) ; TODO: add face
      )))
 
 ;;;###autoload
