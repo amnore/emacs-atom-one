@@ -15,7 +15,8 @@
 (require 'cl-macs)
 (require 'subr-x)
 
-(deftheme one-light-port)
+(deftheme one-light-port
+  "Yet another port of Atom's One Light theme.")
 
 (defun one-light-port--mix (color1 color2 &optional weight)
   "Mix COLOR1 and COLOR2.
@@ -154,6 +155,7 @@ If THRESHOLD if omitted, use 0.43 by default."
          ;; Custom Syntax Variables
          (syntax-cursor-line (mix syntax-fg syntax-bg 0.05))
          (syntax-deprecated-fg (darken syntax-color-modified 0.5))
+         (syntax-deprecated-bg syntax-color-modified)
          (syntax-illegal-fg (name-to-hsl "white"))
          (syntax-illegal-bg syntax-color-removed)
 
@@ -165,12 +167,12 @@ If THRESHOLD if omitted, use 0.43 by default."
                    (hue ui-syntax-color)))
          (ui-saturation (min (saturation ui-syntax-color) 0.24))
          (ui-lightness (max (lightness ui-syntax-color) 0.92))
-         (--ui-bg `(,ui-hue ,ui-saturation ,(- ui-lightness 0.72)))
+         (--ui-bg `(,ui-hue ,ui-saturation ,ui-lightness))
          (--base-background-color --ui-bg)
          (--level-3-color (darken --base-background-color 0.06))
          ;; Main colors
-         (ui-fg --ui-bg)
-         (ui-bg `(,ui-hue ,ui-saturation ,ui-lightness))
+         (ui-fg `(,ui-hue ,ui-saturation ,(- ui-lightness 0.72)))
+         (ui-bg --ui-bg)
          (ui-border (darken --level-3-color 0.06))
          ;; Background (Custom)
          (level-1-color (lighten --base-background-color 0.04))
@@ -268,7 +270,7 @@ If THRESHOLD if omitted, use 0.43 by default."
          (tooltip-text-key-color tooltip-background-color)
          (tooltip-background-key-color tooltip-text-color)
          ;; Sizes
-         (font-size 12)
+         (font-size 120)
          (input-font-size 14)
          (disclosure-arrow-size 12)
          (component-padding 10)
@@ -286,47 +288,68 @@ If THRESHOLD if omitted, use 0.43 by default."
          (ui-line-height (* 2 ui-size))
          (ui-tab-height (* 2.5 ui-size))
 
-         (display '((class color) (min-colors 16777216))))
+         (display '((class color) (min-colors 89))))
     (custom-theme-set-faces
      'one-light-port
-     `(default (,display . (:height ,font-size
+
+     ;; Standard faces: https://www.gnu.org/software/emacs/manual/html_node/emacs/Standard-Faces.html
+     `(default ((,display (:height ,font-size
                             :foreground ,(to-hex syntax-text-color)
-                            :background ,(to-hex syntax-background-color)))) ; editor.less atom-text-editor
-     `(shadow (,display . ())) ; TODO: add face for shadow
-     `(highlight (,display . (:foreground ,(to-hex text-color-highlight)
-                              :background ,(to-hex background-color-highlight)))) ; text.less .highlight
-     `(isearch (,display . (:inherit lazy-highlight :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected))))) ; TODO: add face for isearch
-     `(query-replace (,display . ())) ; TODO: add face for query-replace
-     `(lazy-highlight (,display . (:background ,(to-hex syntax-result-marker-color)))) ; editor.less .find-result
-     `(region (,display . (:background ,(to-hex syntax-selection-color)))) ; editor.less .region
-     `(secondary-selection (,display . (:inherit region))) ; editor.less .region
-     `(trailing-whitespace (,display . ())) ; TODO: add face for trailing whitespace
-     `(escape-glyph (,display . (:foreground ,(to-hex syntax-invisible-character-color)))) ; editor.less .invisible-character
-     `(homoglyph (,display . ())) ; TODO: add face for homoglyph
-     `(nobreak-space (,display . ())) ; TODO: add face for nobreak space
-     `(nobreak-hyphen (,display . ())) ; TODO: add face for nobreak hyphen
-     `(mode-line (,display . (:background ,(to-hex level-3-color)))) ; status-bar.less .status-bar
-     `(mode-line-inactive (,display . ())) ; TODO: add face for inactive mode line
-     `(mode-line-highlight (,display . ())) ; TODO: add face for highlighted mode line
-     `(mode-line-buffer-id (,display . ())) ; TODO: add face for buffer id
-     `(header-line (,display . ())) ; TODO: add face for header line
-     `(header-line-highlight (,display . ())) ; TODO: add face for highlighted header line
-     `(tab-line (,display . (:background ,(to-hex tab-bar-background-color)))) ; tabs.less .tab-bar
-     `(vertical-border (,display . ())) ; TODO: add face for vertical border
-     `(minibuffer-prompt (,display . ())) ; TODO: add face for minibuffer prompt
-     `(fringe (,display . ())) ; TODO: add face for fringe
-     `(cursor (,display . (:background ,(to-hex syntax-cursor-color)))) ; editor.less .cursor
-     `(tooltip (,display . ())) ; TODO: add face for tooltip
-     `(mouse (,display . ())) ; TODO: add face for mouse
-     `(scroll-bar (,display . ())) ; TODO: add face for scroll bar
-     `(tool-bar (,display . ())) ; TODO: add face for tool bar
-     `(tab-bar (,display . ())) ; TODO: add face for tab bar
-     `(menu (,display . ())) ; TODO: add face for menu
-     `(tty-menu-enabled-face (,display . ())) ; TODO: add face for enabled tty menu
-     `(tty-menu-disabled-face (,display . ())) ; TODO: add face for disabled tty menu
-     `(tty-menu-selected-face (,display . ())) ; TODO: add face for selected tty menu
+                            :background ,(to-hex syntax-background-color))))) ; editor.less atom-text-editor
+     `(shadow ((,display ()))) ; TODO: add face for shadow
+     `(highlight ((,display (:background ,(to-hex background-color-highlight))))) ; text.less .highlight
+     `(isearch ((,display (:inherit lazy-highlight :box (:line-width 2 :color ,(to-hex syntax-result-marker-color-selected)))))) ; TODO: add face for isearch
+     `(query-replace ((,display ()))) ; TODO: add face for query-replace
+     `(lazy-highlight ((,display (:background ,(to-hex syntax-result-marker-color))))) ; editor.less .find-result
+     `(region ((,display (:background ,(to-hex syntax-selection-color))))) ; editor.less .region
+     `(secondary-selection ((,display (:inherit region)))) ; editor.less .region
+     `(trailing-whitespace ((,display ()))) ; TODO: add face for trailing whitespace
+     `(escape-glyph ((,display (:foreground ,(to-hex syntax-invisible-character-color))))) ; editor.less .invisible-character
+     `(homoglyph ((,display ()))) ; TODO: add face for homoglyph
+     `(nobreak-space ((,display ()))) ; TODO: add face for nobreak space
+     `(nobreak-hyphen ((,display ()))) ; TODO: add face for nobreak hyphen
+     `(mode-line ((,display (:background ,(to-hex level-3-color))))) ; status-bar.less .status-bar
+     `(mode-line-inactive ((,display ()))) ; TODO: add face for inactive mode line
+     `(mode-line-highlight ((,display ()))) ; TODO: add face for highlighted mode line
+     `(mode-line-buffer-id ((,display ()))) ; TODO: add face for buffer id
+     `(header-line ((,display ()))) ; TODO: add face for header line
+     `(header-line-highlight ((,display ()))) ; TODO: add face for highlighted header line
+     `(tab-line ((,display (:background ,(to-hex tab-bar-background-color))))) ; tabs.less .tab-bar
+     `(vertical-border ((,display ()))) ; TODO: add face for vertical border
+     `(minibuffer-prompt ((,display ()))) ; TODO: add face for minibuffer prompt
+     `(fringe ((,display ()))) ; TODO: add face for fringe
+     `(cursor ((,display (:background ,(to-hex syntax-cursor-color))))) ; editor.less .cursor
+     `(tooltip ((,display ()))) ; TODO: add face for tooltip
+     `(mouse ((,display ()))) ; TODO: add face for mouse
+     `(scroll-bar ((,display ()))) ; TODO: add face for scroll bar
+     `(tool-bar ((,display ()))) ; TODO: add face for tool bar
+     `(tab-bar ((,display ()))) ; TODO: add face for tab bar
+     `(menu ((,display ()))) ; TODO: add face for menu
+     `(tty-menu-enabled-face ((,display ()))) ; TODO: add face for enabled tty menu
+     `(tty-menu-disabled-face ((,display ()))) ; TODO: add face for disabled tty menu
+     `(tty-menu-selected-face ((,display ()))) ; TODO: add face for selected tty menu
+
+     ;; Font Lock Faces: https://www.gnu.org/software/emacs/manual/html_node/elisp/Faces-for-Font-Lock.html
+     `(font-lock-warning-face ((,display (:foreground ,(to-hex syntax-deprecated-fg) :background ,(to-hex syntax-deprecated-bg))))) ; base.less .syntax-deprecated
+     `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2))))) ; base.less .syntax--entity &.syntax--function
+     `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1))))) ; base.less .syntax--entity
+     `(font-lock-keyword-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword
+     `(font-lock-comment-face ((,display (:foreground ,(to-hex mono-3) :slant italic)))) ; base.less .syntax--comment
+     `(font-lock-comment-delimiter-face ((,display (:inherit font-lock-comment-face))))
+     `(font-lock-type-face ((,display (:foreground ,(to-hex hue-1))))) ; base.less .syntax--entity &.syntax--type
+     `(font-lock-constant-face ((,display (:foreground ,(to-hex hue-6))))) ; base.less .syntax--constant
+     `(font-lock-builtin-face ((,display (:foreground ,(to-hex hue-5))))) ; base.less .syntax--entity &.syntax--function
+     `(font-lock-preprocessor-face ((,display (:inherit font-lock-keyword-face))))
+     `(font-lock-string-face ((,display (:foreground ,(to-hex hue-4))))) ; base.less .syntax--string
+     `(font-lock-doc-face ((,display (:inherit font-lock-comment-face))))
+     `(font-lock-negation-char-face ((,display (:foreground ,(to-hex hue-3))))) ; base.less .syntax--keyword &.syntax--operator
      )))
 
+;;;###autoload
+(when (and (boundp 'custom-theme-load-path) load-file-name)
+  (add-to-list 'custom-theme-load-path
+               (file-name-as-directory (file-name-directory load-file-name))))
 
 (provide-theme 'one-light-port)
-;;; one-light-port.el ends here
+(provide 'one-light-port-theme)
+;;; one-light-port-theme.el ends here
