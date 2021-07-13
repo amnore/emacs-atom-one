@@ -392,6 +392,8 @@ If THRESHOLD if omitted, use 0.43 by default."
                                         ; text.less: .text-error
      `(warning ((,display (:foreground ,(to-hex text-color-warning)))))
                                         ; text.less: .text-warning
+     `(info ((,display (:foreground ,(to-hex text-color-info)))))
+                                        ; inherited by other faces
      `(success ((,display (:foreground ,(to-hex text-color-success)))))
                                         ; text.less: .text-success
      `(show-paren-match ((,display (:underline ,(to-hex syntax-cursor-color)))))
@@ -478,6 +480,32 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(company-preview-search ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-echo nil ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-echo-common ((,display (:background "#ff0000")))) ; TODO: add face
+
+     ;; flycheck.el
+     `(flycheck-error
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-error))))))
+     `(flycheck-warning
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-warning))))))
+     `(flycheck-info
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-warning))))))
+     `(flycheck-fringe-error ((,display (:inherit error))))
+     `(flycheck-fringe-warning ((,display (:inherit warning))))
+     `(flycheck-fringe-info ((,display (:inherit info))))
+     `(flycheck-error-list-error ((,display (:inherit error))))
+     `(flycheck-error-list-warning ((,display (:inherit warning))))
+     `(flycheck-error-list-info ((,display (:inherit info))))
+     `(flycheck-error-list-filename ((,display ())))
+     `(flycheck-error-list-id
+       ((,display (:foreground ,(to-hex text-color-subtle)))))
+     `(flycheck-error-list-id-with-explainer
+       ((,display (:inherit flycheck-error-list-id))))
+     `(flycheck-error-list-checker-name
+       ((,display (:foreground ,(to-hex text-color-subtle)))))
+     `(flycheck-error-list-highlight ((,display (:inherit highlight))))
+
      )))
 
 ;;;###autoload
