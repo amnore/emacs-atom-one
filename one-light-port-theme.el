@@ -18,6 +18,9 @@
 (deftheme one-light-port
   "Yet another port of Atom's One Light theme.")
 
+(defface info nil
+  "Info face, inherited by other faces.")
+
 (defun one-light-port--mix (color1 color2 &optional weight)
   "Mix COLOR1 and COLOR2.
 COLOR1 has a weight of WEIGHT, COLOR2 has (1 - WEIGHT).
@@ -323,7 +326,7 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(default ((,display (:foreground ,(to-hex syntax-text-color)
                            :background ,(to-hex syntax-background-color)))))
                                         ; editor.less: atom-text-editor
-     `(shadow ((,display (,(to-hex text-color-subtle)))))
+     `(shadow ((,display (:foreground ,(to-hex text-color-subtle)))))
      `(link ((,display (:inherit underline
                         :foreground ,(to-hex hue-1)))))
                                         ; base.less: .syntax--link,
@@ -402,6 +405,9 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(show-paren-mismatch
        ((,display (:foreground ,(to-hex text-color-error)))))
 
+     ;; hl-line.el
+     `(hl-line ((,display (:background ,(to-hex syntax-cursor-line)))))
+
      ;; isearch.el
      `(isearch
        ((,display
@@ -414,7 +420,7 @@ If THRESHOLD if omitted, use 0.43 by default."
                                         ; editor.less: .find-result
 
      ;; font-lock.el
-     `(font-lock-warning-face ((,display (:inherit warning))))
+     `(font-lock-warning-face ((,display (:foreground ,(to-hex hue-6-2)))))
      `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2)))))
                                         ; base.less: .syntax--function
      `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1)))))
@@ -437,8 +443,17 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(font-lock-string-face ((,display (:foreground ,(to-hex hue-4)))))
                                         ; base.less: .syntax--string
      `(font-lock-doc-face ((,display (:inherit font-lock-comment-face))))
+     `(font-lock-doc-markup-face ((,display (:foreground ,(to-hex (lighten mono-3 0.06))
+                                             :weight bold))))
+                                        ; base.less: .syntax--comment.syntax--caption
+     ; base.less: .
      `(font-lock-negation-char-face ((,display (:foreground ,(to-hex hue-3)))))
                                         ; base.less: .syntax--operator
+     `(font-lock-regexp-grouping-backslash ((,display (:foreground ,(to-hex hue-3)))))
+                                        ; base.less: syntax--regex.syntax--punctuation
+     `(font-lock-regexp-grouping-construct ((,display (:foreground ,(to-hex hue-3)))))
+                                        ; base.less: syntax--regex.syntax--punctuation
+     
 
      ;; company.el
      `(company-tooltip
@@ -475,8 +490,8 @@ If THRESHOLD if omitted, use 0.43 by default."
        ((,display (:background ,(to-hex scrollbar-color)))))
      `(company-scrollbar-bg
        ((,display (:background ,(to-hex scrollbar-background-color)))))
-     `(company-preview ((,display (:background "#ff0000")))) ; TODO: add face
-     `(company-preview-common ((,display (:background "#ff0000")))) ; TODO: add face
+     `(company-preview ((,display (:inherit shadow))))
+     `(company-preview-common ((,display (:inherit (shadow bold)))))
      `(company-preview-search ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-echo nil ((,display (:background "#ff0000")))) ; TODO: add face
      `(company-echo-common ((,display (:background "#ff0000")))) ; TODO: add face
@@ -506,6 +521,52 @@ If THRESHOLD if omitted, use 0.43 by default."
        ((,display (:foreground ,(to-hex text-color-subtle)))))
      `(flycheck-error-list-highlight ((,display (:inherit highlight))))
 
+     ;; doom-modeline-core.el
+     `(doom-modeline-buffer-modified
+       ((,display (:foreground ,(to-hex text-color-modified)))))
+     `(doom-modeline-info ((,display(:foreground ,(to-hex background-color-success)))))
+     `(doom-modeline-bar
+       ((,display (:background ,(to-hex ui-site-color-2)))))
+     `(doom-modeline-bar-inactive
+       ((,display (:background ,(to-hex tab-background-color)))))
+     `(doom-modeline-evil-emacs-state
+       ((,display (:foreground ,(face-foreground 'mode-line-inactive)))))
+     `(doom-modeline-evil-insert-state
+       ((,display (:foreground ,(to-hex ui-site-color-1)))))
+     `(doom-modeline-evil-motion-state
+       ((,display (:foreground ,(to-hex ui-site-color-3)))))
+     `(doom-modeline-evil-normal-state
+       ((,display (:foreground ,(to-hex ui-site-color-2)))))
+     `(doom-modeline-evil-operator-state
+       ((,display (:foreground ,(to-hex ui-site-color-3)))))
+     `(doom-modeline-evil-visual-state
+       ((,display (:foreground ,(to-hex ui-site-color-4)))))
+     `(doom-modeline-lsp-running
+       ((,display (:inherit info :weight normal))))
+
+     ;; lsp-semantic-tokens.el
+     `(lsp-face-semhl-namespace ((,display (:inherit lsp-face-semhl-constant))))
+     `(lsp-face-semhl-regexp ((,display (:inherit lsp-face-semhl-string))))
+     `(lsp-face-semhl-operator ((,display (:inherit lsp-face-semhl-keyword))))
+     `(lsp-face-semhl-enum ((,display (:inherit lsp-face-semhl-type))))
+     `(lsp-face-semhl-member ((,display (:foreground ,(to-hex hue-5)))))
+                                        ; base.less: .syntax--variable
+     `(lsp-face-semhl-property
+       ((,display (:inherit lsp-face-semhl-member))))
+     `(lsp-face-semhl-macro ((,display (:inherit lsp-face-semhl-constant))))
+     `(lsp-face-semhl-label ((,display (:underline t))))
+     `(lsp-face-semhl-deprecated ((,display (:inherit font-lock-warning-face))))
+
+     ;; button.el
+     `(button ((,display (:inherit underline))))
+
+     ;; mmm-vars.el
+     `(mmm-default-submode-face ((,display ())))
+
+     ;; hl-todo.el
+     `(hl-todo ((,display (:foreground ,(to-hex (lighten mono-3 0.06))
+                           :weight bold))))
+                                        ; base.less: .syntax--comment.syntax--caption
      )))
 
 ;;;###autoload
