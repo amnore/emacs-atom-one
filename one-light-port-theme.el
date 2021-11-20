@@ -567,6 +567,32 @@ If THRESHOLD if omitted, use 0.43 by default."
      `(hl-todo ((,display (:foreground ,(to-hex (lighten mono-3 0.06))
                            :weight bold))))
                                         ; base.less: .syntax--comment.syntax--caption
+
+     ;; css-mode.el
+     `(css-selector ((,display (:foreground ,(to-hex hue-6)))))
+     `(css-property ((,display (:foreground ,(to-hex mono-1)))))
+
+     ;; web-mode.el
+     `(web-mode-error-face ((,display (:inherit error))))
+     `(web-mode-symbol-face ((,display (:inherit font-lock-variable-name-face))))
+     `(web-mode-doctype-face ((,display (:foreground ,(to-hex mono-1)))))
+                                        ; syntax-legacy/_base.less: .syntax--meta.syntax--tag
+     `(web-mode-html-tag-face ((,display (:foreground ,(to-hex hue-5)))))
+                                        ; base.less: .syntax--entity.syntax--span
+     `(web-mode-html-tag-bracket-face ((,display (:foreground ,(to-hex mono-1)))))
+                                        ; base.less: .syntax--punctuation
+     `(web-mode-html-attr-name-face ((,display (:foreground ,(to-hex hue-6)))))
+                                        ; base.less: .syntax--entity.syntax--attribute
+     `(web-mode-html-attr-engine-face ((,display (:inherit web-mode-html-attr-name-face))))
+     `(web-mode-css-selector-face ((,display (:inherit css-selector))))
+                                        ; css.less: .syntax--css.syntax--selector
+     `(web-mode-css-pseudo-class-face ((,display (:inherit web-mode-css-selector-face))))
+     `(web-mode-css-property-name-face ((,display (:inherit css-property))))
+     `(web-mode-css-color-face ((,display (:foreground ,(to-hex hue-6)))))
+                                        ; css.less: .syntax--css.syntax--constant.syntax--color
+     `(web-mode-css-priority-face ((,display (:inherit font-lock-keyword-face))))
+     `(web-mode-css-function-face ((,display (:inherit font-lock-function-name-face))))
+     `(web-mode-css-variable-face ((,display (:foreground ,(to-hex hue-5)))))
      )))
 
 ;;;###autoload
