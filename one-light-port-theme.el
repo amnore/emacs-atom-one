@@ -21,6 +21,37 @@
 (defface info nil
   "Info face, inherited by other faces.")
 
+(defface lsp-face-semhl-declaration nil
+  "LSP face for declaration modifier.")
+
+(defface lsp-face-semhl-readonly nil
+  "LSP face for readonly modifier.")
+
+(defface lsp-face-semhl-abstract nil
+  "LSP face for abstract modifier.")
+
+(defface lsp-face-semhl-async nil
+  "LSP face for async modifier.")
+
+(defface lsp-face-semhl-modification nil
+  "LSP face for modification modifier.")
+
+(defface lsp-face-semhl-documentation nil
+  "LSP face for documentation modifier.")
+
+(with-eval-after-load 'lsp-semantic-tokens
+  (setq lsp-semantic-token-modifier-faces
+        '(("declaration" . lsp-face-semhl-declaration)
+          ("definition" . lsp-face-semhl-definition)
+          ("readonly" . lsp-face-semhl-readonly)
+          ("static" . lsp-face-semhl-static)
+          ("deprecated" . lsp-face-semhl-deprecated)
+          ("abstract" . lsp-face-semhl-abstract)
+          ("async" . lsp-face-semhl-async)
+          ("modification" . lsp-face-semhl-modification)
+          ("documentation" . lsp-face-semhl-documentation)
+          ("defaultLibrary" . lsp-face-semhl-default-library))))
+
 (defun one-light-port--mix (color1 color2 &optional weight)
   "Mix COLOR1 and COLOR2.
 COLOR1 has a weight of WEIGHT, COLOR2 has (1 - WEIGHT).
@@ -555,7 +586,18 @@ If THRESHOLD if omitted, use 0.43 by default."
        ((,display (:inherit lsp-face-semhl-member))))
      `(lsp-face-semhl-macro ((,display (:inherit lsp-face-semhl-constant))))
      `(lsp-face-semhl-label ((,display (:underline t))))
-     `(lsp-face-semhl-deprecated ((,display (:inherit font-lock-warning-face))))
+
+     ;; TODO: Add face to modifiers
+     `(lsp-face-semhl-declaration ((,display nil)))
+     `(lsp-face-semhl-definition ((,display nil)))
+     `(lsp-face-semhl-readonly ((,display nil)))
+     `(lsp-face-semhl-static ((,display nil)))
+     `(lsp-face-semhl-deprecated ((,display nil)))
+     `(lsp-face-semhl-abstract ((,display nil)))
+     `(lsp-face-semhl-async ((,display nil)))
+     `(lsp-face-semhl-modification ((,display nil)))
+     `(lsp-face-semhl-documentation ((,display nil)))
+     `(lsp-face-semhl-default-library ((,display nil)))
 
      ;; button.el
      `(button ((,display (:inherit underline))))
