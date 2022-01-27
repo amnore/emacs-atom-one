@@ -21,13 +21,6 @@
 
 (require 'one-light-lib)
 
-(custom-theme-set-variables
-     'one-light
-     `(flycheck-posframe-border-width 1))
-
-(with-eval-after-load 'company-box
-      (add-to-list 'company-box-frame-parameters '(child-frame-border-width . 1)))
-
 (cl-flet ((to-ratio (degree) (one-light-lib--degree-to-ratio degree))
           (mix (c1 c2 &optional w) (one-light-lib--mix c1 c2 w))
           (darken (color ratio) (apply 'color-darken-hsl
@@ -40,7 +33,7 @@
           (hsv-to-hsl (hsv) (one-light-lib--color-hsv-to-hsl hsv))
           (hex-to-hsl (hex) (one-light-lib--color-hex-to-hsl hex))
           (to-hex (hsl) (apply 'color-rgb-to-hex (apply 'color-hsl-to-rgb hsl)))
-          (contrast (color dark light &optional threshold)
+          (contrast (color &optional dark light threshold)
                     (one-light-lib--color-contrast color dark light threshold))
           (hue (hsl) (nth 0 hsl))
           (saturation (hsl) (nth 1 hsl))
@@ -75,7 +68,7 @@
          (text-color-highlight (darken text-color 0.12))
          (text-color-selected (darken text-color-highlight 0.12))
          (text-color-info `(,(to-ratio 208) 1 0.54))
-         (text-color-success `(,(to-ratio 132) 1 0.44))
+         (text-color-success `(,(to-ratio 132) 0.6 0.44))
          (text-color-warning `(,(to-ratio 37) 0.9 0.44))
          (text-color-error `(,(to-ratio 9) 0.9 0.56))
          ;; Text (Custom)
@@ -177,8 +170,8 @@
          (tooltip-text-key-color tooltip-background-color)
          (tooltip-background-key-color tooltip-text-color)
          ;; Sizes
-         (font-size 12) ; TODO: use the correct size
-         (input-font-size 14)
+         (font-size 9) ; TODO: use the correct size
+         (input-font-size 12)
          (disclosure-arrow-size 12)
          (component-padding 10)
          (component-icono-padding 5)
@@ -198,18 +191,21 @@
          (display '((class color) (min-colors 89))))
     (custom-theme-set-faces
      'one-light
+
+     ;; faces.el
+     ;; status-bar.less, tabs.less, settings-view.less, atom.less,
+     ;; panes.less, packages.less
      `(mode-line ((,display (:background ,(to-hex level-3-color)))))
-                                        ; status-bar.less: .status-bar
+                                        ; .status-bar
      `(mode-line-inactive ((,display (:foreground ,(to-hex tab-text-color)))))
-                                        ; tabs.less: .tab
+                                        ; .tab
      `(mode-line-highlight
        ((,display (:background ,(to-hex level-3-color-hover)))))
-                                        ; status-bar.less:
                                         ; .status-bar.inline-block:hover
      `(mode-line-buffer-id ((,display (:inherit mode-line))))
      `(header-line ((,display (:foreground ,(to-hex text-color-subtle)
                                :background ,(to-hex base-background-color)))))
-                                        ; settings-view.less: .breadcrumb
+                                        ; .breadcrumb
      `(header-line-highlight ((,display (:inherit header-line :underline t))))
      `(vertical-border ((,display (:inherit border))))
      `(window-divider ((,display (:inherit border))))
@@ -219,18 +215,19 @@
      `(child-frame-border ((,display (:inherit border))))
      `(fringe ((,display ())))
      `(scroll-bar ((,display (:foreground ,(to-hex scrollbar-color)))))
-                                        ; atom.less: ::-webkit-scrollbar-thumb
+                                        ; ::-webkit-scrollbar-thumb
      `(border ((,display (:foreground ,(to-hex base-border-color)
                           :background ,(to-hex base-border-color)))))
-                                        ; panes.less: atom-pane
+                                        ; atom-pane
      `(tool-bar ((,display (:background-color ,(to-hex level-3-color)))))
-                                        ; packages.less: .tool-bar
+                                        ; .tool-bar
      `(tab-bar ((,display (:foreground ,(to-hex tab-text-color)
                            :background ,(to-hex tab-background-color)))))
-                                        ; tabs.less: .tab-bar, .tab
-     `(tab-line ((,display (:inherit tab-bar)))) ; tabs.less: .tab-bar
+                                        ; .tab-bar, .tab
+     `(tab-line ((,display (:inherit tab-bar)))) ; .tab-bar
 
      ;; flycheck-posframe.el
+     ;; lists.less, modal.less
      `(flycheck-posframe-face ((,display (:foreground ,(to-hex text-color)
                                           :background ,(to-hex overlay-background-color)))))
      `(flycheck-posframe-info-face ((,display (:inherit flycheck-posframe-face
@@ -243,6 +240,7 @@
      `(flycheck-posframe-border-face ((,display (:foreground ,(to-hex overlay-border-color)))))
 
      ;; popup.el
+     ;; lists.less
      `(popup-face ((,display (:foreground ,(to-hex text-color)
                               :background ,(to-hex overlay-background-color)))))
      `(popup-summary-face ((,display (:inherit popup-face
@@ -261,35 +259,34 @@
      `(popup-menu-summary-face ((,display (:inherit popup-summary-face))))
 
      ;; company.el
+     ;; autocomplete.less, lists.less
      `(company-tooltip
        ((,display (:foreground ,(to-hex text-color)
-                                        ; autocomplete.less: li
+                                        ; li
                    :background ,(to-hex overlay-background-color)))))
-                                        ; lists.less: .select-list.popover-list
+                                        ; .select-list.popover-list
      `(company-tooltip-selection
        ((,display (:background ,(to-hex background-color-selected)))))
-                                        ; lists.less: li.selected
+                                        ; li.selected
      `(company-tooltip-search ((,display (:inherit company-tooltip-common))))
      `(company-tooltip-search-selection
        ((,display (:inherit company-tooltip-common-selection))))
      `(company-tooltip-mouse ((,display (:inherit company-tooltip))))
      `(company-tooltip-common
        ((,display (:foreground ,(to-hex text-color-highlight)
-                   :weight bold)))) ; autocomplete.less: .character-match
+                   :weight bold)))) ; .character-match
      `(company-tooltip-common-selection
        ((,display (:foreground ,(to-hex text-color-selected)
-                                        ; autocomplete.less:
                                         ; li.selected.character-match
-                   :weight bold)))) ; autocomplete.less: .character-match
+                   :weight bold)))) ; .character-match
      `(company-tooltip-annotation
        ((,display (:inherit company-tooltip
                    :foreground ,(to-hex text-color-subtle)))))
-                                        ; autocomplete.less: .right-label
+                                        ; .right-label
      `(company-tooltip-annotation-selection
        ((,display (:inherit company-tooltip-selection
                    :foreground ,(to-hex (mix text-color-selected
                                              overlay-backdrop-color))))))
-                                        ; autocomplete.less:
                                         ; li.selected.right-label
      `(company-scrollbar-fg
        ((,display (:background ,(to-hex scrollbar-color)))))
@@ -326,7 +323,45 @@
      `(doom-modeline-evil-visual-state
        ((,display (:foreground ,(to-hex ui-site-color-4)))))
      `(doom-modeline-lsp-running
-       ((,display (:inherit info :weight normal)))))))
+       ((,display (:inherit info :weight normal))))
+
+     ;; treemacs-faces.el
+     ;; tree-view.less, lists.less
+     `(treemacs-directory-face ((,display (:inherit default))))
+     `(treemacs-root-face ((,display (:inherit default))))
+     `(treemacs-git-modified-face
+       ((,display (:inherit default
+                   :foreground ,(to-hex text-color-modified)))))
+    `(treemacs-git-renamed-face
+      ((,display (:inherit default
+                  :foreground ,(to-hex text-color-renamed)))))
+    `(treemacs-git-ignored-face
+      ((,display (:inherit default
+                  :foreground ,(to-hex text-color-ignored)))))
+    `(treemacs-git-untracked-face
+      ((,display (:inherit treemacs-git-added-face))))
+    `(treemacs-git-added-face
+      ((,display (:inherit default
+                  :foreground ,(to-hex text-color-added))))))
+
+    (defun one-light-ui--treemacs-remap-face ()
+      (set (make-local-variable 'face-remapping-alist)
+           `((default
+               :foreground ,(to-hex text-color)
+               :background ,(to-hex tree-view-background-color)
+               :height ,(* 10 font-size))
+             (hl-line
+              :foreground ,(to-hex (contrast button-background-color-selected))
+              :background ,(to-hex button-background-color-selected)
+              :extend t))))
+    (add-hook 'treemacs-mode-hook 'one-light-ui--treemacs-remap-face)
+
+    (custom-theme-set-variables
+     'one-light
+     `(flycheck-posframe-border-width 1))
+
+    (with-eval-after-load 'company-box
+      (add-to-list 'company-box-frame-parameters '(child-frame-border-width . 1)))))
 
 (provide 'one-light-ui)
 ;;; one-light-ui.el ends here

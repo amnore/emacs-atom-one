@@ -75,14 +75,16 @@ If WEIGHT is not specified, default to 0.5."
            (mapcar (lambda (x) (/ x hex-max))
                    (mapcar subhex '(0 1 2))))))
 
-(defun one-light-lib--color-contrast (color dark light &optional threshold)
+(defun one-light-lib--color-contrast (color &optional dark light threshold)
   "Choose between DARK and LIGHT based on the luma value of COLOR.
 If the luma is less than THRESHOLD, choose LIGHT, otherwise choose DARK.
 If THRESHOLD if omitted, use 0.43 by default."
-  (let ((thld (or threshold 0.43)))
+  (let ((black (or dark '(0 0 0)))
+        (white (or light '(0 0 1)))
+        (thld (or threshold 0.43)))
     (if (< (one-light-lib--luma color) thld)
-        light
-      dark)))
+        white
+      black)))
 
 (provide 'one-light-lib)
 ;;; one-light-lib.el ends here
