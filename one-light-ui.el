@@ -288,9 +288,9 @@
                    :foreground ,(to-hex (mix text-color-selected
                                              overlay-backdrop-color))))))
                                         ; li.selected.right-label
-     `(company-scrollbar-fg
+     `(company-tooltip-scrollbar-thumb
        ((,display (:background ,(to-hex scrollbar-color)))))
-     `(company-scrollbar-bg
+     `(company-tooltip-scrollbar-track
        ((,display (:background ,(to-hex scrollbar-background-color)))))
      `(company-preview ((,display (:inherit shadow))))
      `(company-preview-common ((,display (:inherit (shadow bold)))))
@@ -301,6 +301,12 @@
      ;; company-box.el
      `(company-box-candidate ((,display :inherit company-tooltip)))
      `(company-box-scrollbar ((,display :background ,(to-hex scrollbar-color))))
+
+     ;; company-posframe.el
+     `(company-posframe-quickhelp ((,display :inherit company-tooltip)))
+     `(company-posframe-quickhelp-header
+       ((,display :inherit header-line
+                  :background ,(to-hex overlay-background-color))))
 
      ;; doom-modeline-core.el
      `(doom-modeline-buffer-modified
@@ -327,38 +333,54 @@
 
      ;; treemacs-faces.el
      ;; tree-view.less, lists.less
-     `(treemacs-directory-face ((,display (:inherit default))))
-     `(treemacs-root-face ((,display (:inherit default))))
+     `(treemacs-directory-face ((,display (:inherit (variable-pitch default)))))
+     `(treemacs-file-face ((,display (:inherit treemacs-directory-face))))
+     `(treemacs-root-face ((,display (:inherit treemacs-directory-face))))
      `(treemacs-git-modified-face
-       ((,display (:inherit default
+       ((,display (:inherit treemacs-file-face
                    :foreground ,(to-hex text-color-modified)))))
     `(treemacs-git-renamed-face
-      ((,display (:inherit default
+      ((,display (:inherit treemacs-file-face
                   :foreground ,(to-hex text-color-renamed)))))
     `(treemacs-git-ignored-face
-      ((,display (:inherit default
+      ((,display (:inherit treemacs-file-face
                   :foreground ,(to-hex text-color-ignored)))))
     `(treemacs-git-untracked-face
       ((,display (:inherit treemacs-git-added-face))))
     `(treemacs-git-added-face
-      ((,display (:inherit default
+      ((,display (:inherit treemacs-file-face
                   :foreground ,(to-hex text-color-added))))))
 
-    (defun one-light-ui--treemacs-remap-face ()
-      (set (make-local-variable 'face-remapping-alist)
-           `((default
-               :foreground ,(to-hex text-color)
-               :background ,(to-hex tree-view-background-color)
-               :height ,(* 10 font-size))
-             (hl-line
-              :foreground ,(to-hex (contrast button-background-color-selected))
-              :background ,(to-hex button-background-color-selected)
-              :extend t))))
-    (add-hook 'treemacs-mode-hook 'one-light-ui--treemacs-remap-face)
+    (add-hook
+     'treemacs-mode-hook
+     (lambda ()
+       (set (make-local-variable 'face-remapping-alist)
+            `((default
+                :foreground ,(to-hex text-color)
+                :background ,(to-hex tree-view-background-color)
+                :height ,(* 10 font-size))
+              (hl-line
+               :foreground ,(to-hex (contrast button-background-color-selected))
+               :background ,(to-hex button-background-color-selected)
+               :extend t)))
+       (treemacs-fringe-indicator-mode -1)
+       (set-window-fringes nil 0 0)
+       (setq line-spacing 5
+             mode-line-format nil)))
 
     (custom-theme-set-variables
      'one-light
-     `(flycheck-posframe-border-width 1))
+     `(flycheck-posframe-border-width 1)
+     `(hl-line-sticky-flag nil))
+
+    (with-eval-after-load 'company-posframe
+      (setq company-posframe-show-params '(:border-width 1)
+            company-posframe-quickhelp-show-params
+            '(:border-width 1
+              :poshandler company-posframe-quickhelp-right-poshandler
+              :timeout 60
+              :no-properties nil)))
+    
 
     (with-eval-after-load 'company-box
       (add-to-list 'company-box-frame-parameters '(child-frame-border-width . 1)))))
