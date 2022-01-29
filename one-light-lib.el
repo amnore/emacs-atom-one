@@ -38,12 +38,12 @@ If WEIGHT is not specified, default to 0.5."
 (defun one-light-lib--luma (color)
   "Calculate the luma of COLOR."
   (let* ((rgb (apply 'color-hsl-to-rgb color))
-         (gamma-expand (lambda (u) (if (< u 0.3928)
-                                           (/ u 12.92)
-                                         (expt (/ (+ u 0.055) 1.055) 2.4))))
+         (gamma-expand (lambda (u) (if (< u 0.03928)
+                                  (/ u 12.92)
+                                (expt (/ (+ u 0.055) 1.055) 2.4))))
          (rgb-linear (mapcar gamma-expand rgb)))
     (cl-reduce '+ (cl-mapcar (lambda (w u) (* w u))
-                             '(0.2126 0.1752 0.0722)
+                             '(0.2126 0.7152 0.0722)
                              rgb-linear))))
 
 (defun one-light-lib--color-hsv-to-hsl (color)
@@ -53,10 +53,10 @@ If WEIGHT is not specified, default to 0.5."
          (v (nth 2 color))
          (l (* v (- 1 (/ s 2)))))
     (list h
-          l
           (if (or (= l 0) (= l 1))
               0
-            (/ (- v l) (min l (- 1 l)))))))
+            (/ (- v l) (min l (- 1 l))))
+          l)))
 
 (defun one-light-lib--degree-to-ratio (degree)
   "Convert DEGREE to its ratio of a circle."
