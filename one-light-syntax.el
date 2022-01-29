@@ -140,12 +140,6 @@
          (syntax-illegal-fg (name-to-hsl "white"))
          (syntax-illegal-bg syntax-color-removed)
 
-         ;;; ui-variables.less
-         (text-color-info `(,(to-ratio 208) 1 0.54))
-         (text-color-success `(,(to-ratio 132) 1 0.44))
-         (text-color-warning `(,(to-ratio 37) 0.9 0.44))
-         (text-color-error `(,(to-ratio 9) 0.9 0.56))
-
          (display '((class color) (min-colors 89))))
     (custom-theme-set-faces
      'one-light
@@ -186,19 +180,10 @@
      `(glyphless-char
        ((,display (:foreground ,(to-hex syntax-invisible-character-color)))))
                                         ; editor.less: .invisible-character
-     `(error ((,display (:foreground ,(to-hex text-color-error)))))
-                                        ; text.less: .text-error
-     `(warning ((,display (:foreground ,(to-hex text-color-warning)))))
-                                        ; text.less: .text-warning
-     `(info ((,display (:foreground ,(to-hex text-color-info)))))
-                                        ; inherited by other faces
-     `(success ((,display (:foreground ,(to-hex text-color-success)))))
-                                        ; text.less: .text-success
      `(show-paren-match ((,display (:underline ,(to-hex syntax-cursor-color)))))
                                         ; editor.less: .bracket-matcher.region
      `(show-paren-match-expression ((,display (:inherit show-paren-match))))
-     `(show-paren-mismatch
-       ((,display (:foreground ,(to-hex text-color-error)))))
+     `(show-paren-mismatch ((,display nil)))
 
      ;; hl-line.el
      `(hl-line ((,display (:background ,(to-hex syntax-cursor-line)))))
@@ -215,7 +200,7 @@
                                         ; editor.less: .find-result
 
      ;; font-lock.el
-     `(font-lock-warning-face ((,display (:foreground ,(to-hex text-color-warning)))))
+     `(font-lock-warning-face ((,display (:inherit warning))))
      `(font-lock-function-name-face ((,display (:foreground ,(to-hex hue-2)))))
                                         ; base.less: .syntax--function
      `(font-lock-variable-name-face ((,display (:foreground ,(to-hex mono-1)))))
@@ -248,31 +233,6 @@
                                         ; base.less: syntax--regex.syntax--punctuation
      `(font-lock-regexp-grouping-construct ((,display (:foreground ,(to-hex hue-3)))))
                                         ; base.less: syntax--regex.syntax--punctuation
-
-     ;; flycheck.el
-     `(flycheck-error
-       ((,display (:underline (:style wave
-                               :color ,(to-hex text-color-error))))))
-     `(flycheck-warning
-       ((,display (:underline (:style wave
-                               :color ,(to-hex text-color-warning))))))
-     `(flycheck-info
-       ((,display (:underline (:style wave
-                               :color ,(to-hex text-color-info))))))
-     `(flycheck-fringe-error ((,display (:inherit error))))
-     `(flycheck-fringe-warning ((,display (:inherit warning))))
-     `(flycheck-fringe-info ((,display (:inherit info))))
-     `(flycheck-error-list-error ((,display (:inherit error))))
-     `(flycheck-error-list-warning ((,display (:inherit warning))))
-     `(flycheck-error-list-info ((,display (:inherit info))))
-     `(flycheck-error-list-filename ((,display ())))
-     ;; `(flycheck-error-list-id
-     ;;   ((,display (:foreground ,(to-hex text-color-subtle)))))
-     `(flycheck-error-list-id-with-explainer
-       ((,display (:inherit flycheck-error-list-id))))
-     ;; `(flycheck-error-list-checker-name
-     ;;   ((,display (:foreground ,(to-hex text-color-subtle)))))
-     `(flycheck-error-list-highlight ((,display (:inherit highlight))))
 
      ;; lsp-semantic-tokens.el
      `(lsp-face-semhl-namespace ((,display (:inherit lsp-face-semhl-constant))))

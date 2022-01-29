@@ -39,7 +39,7 @@
           (saturation (hsl) (nth 1 hsl))
           (lightness (hsl) (nth 2 hsl)))
   (let* (;;; ui-variables-custom.less, ui-variables.less
-         (ui-syntax-color `(,(to-ratio 220) 0.01 0.98)) ; fallback color
+         (ui-syntax-color `(,(to-ratio 230) 0.01 0.98)) ; fallback color
          (ui-hue (if-let* ((ui-s-h (hue ui-syntax-color))
                            (no-hue (= 0 (hue ui-syntax-color))))
                      (to-ratio 220)
@@ -225,6 +225,39 @@
                            :background ,(to-hex tab-background-color)))))
                                         ; .tab-bar, .tab
      `(tab-line ((,display (:inherit tab-bar)))) ; .tab-bar
+     `(error ((,display (:foreground ,(to-hex text-color-error)))))
+                                        ; text.less: .text-error
+     `(warning ((,display (:foreground ,(to-hex text-color-warning)))))
+                                        ; text.less: .text-warning
+     `(info ((,display (:foreground ,(to-hex text-color-info)))))
+                                        ; inherited by other faces
+     `(success ((,display (:foreground ,(to-hex text-color-success)))))
+                                        ; text.less: .text-success
+
+     ;; flycheck.el
+     `(flycheck-error
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-error))))))
+     `(flycheck-warning
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-warning))))))
+     `(flycheck-info
+       ((,display (:underline (:style wave
+                               :color ,(to-hex text-color-info))))))
+     `(flycheck-fringe-error ((,display (:inherit error))))
+     `(flycheck-fringe-warning ((,display (:inherit warning))))
+     `(flycheck-fringe-info ((,display (:inherit info))))
+     `(flycheck-error-list-error ((,display (:inherit error))))
+     `(flycheck-error-list-warning ((,display (:inherit warning))))
+     `(flycheck-error-list-info ((,display (:inherit info))))
+     `(flycheck-error-list-filename ((,display ())))
+     ;; `(flycheck-error-list-id
+     ;;   ((,display (:foreground ,(to-hex text-color-subtle)))))
+     `(flycheck-error-list-id-with-explainer
+       ((,display (:inherit flycheck-error-list-id))))
+     ;; `(flycheck-error-list-checker-name
+     ;;   ((,display (:foreground ,(to-hex text-color-subtle)))))
+     `(flycheck-error-list-highlight ((,display (:inherit highlight))))
 
      ;; flycheck-posframe.el
      ;; lists.less, modal.less
@@ -362,11 +395,18 @@
               (hl-line
                :foreground ,(to-hex (contrast button-background-color-selected))
                :background ,(to-hex button-background-color-selected)
-               :extend t)))
-       (treemacs-fringe-indicator-mode -1)
-       (set-window-fringes nil 0 0)
+               :extend t)
+              (fringe
+               :foreground ,(to-hex button-background-color-selected)
+               :background ,(to-hex tree-view-background-color))))
+       ;; (treemacs-fringe-indicator-mode -1)
+       ;; (set-window-fringes nil 0 0)
        (setq line-spacing 5
              mode-line-format nil)))
+
+    ;; (with-eval-after-load 'treemacs
+    ;;   (advice-add #'treemacs-select-window :after
+    ;;               (lambda (&rest _) (set-window-fringes nil 0 0))))
 
     (custom-theme-set-variables
      'one-light
