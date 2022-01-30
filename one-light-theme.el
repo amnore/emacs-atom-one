@@ -1,17 +1,17 @@
-;;; one-light-theme.el --- Port of One Light -*- lexical-binding: t -*-
+;;; one-light-theme.el --- Port of Atom One Light -*- lexical-binding: t -*-
 ;;
 ;; Copyright (C) 2022 Chen Zhenge
 ;;
 ;; Author: Chen Zhenge <me@markle.one>
 ;; URL: https://github.com/amnore/emacs-one-light-port
 ;; Keywords: faces one-light
-;; Version: 1
-;; Package-Requires: ((emacs "25.1"))
+;; Version: 0.0.1
+;; Package-Requires: ((emacs "25.1") (names "20180321.1155"))
 ;;
 ;;; Commentary:
 ;;
 ;; Yet another port of Atom's One Light theme
-
+;;
 ;;; Code:
 (deftheme one-light
   "Yet another port of Atom's One Light theme.")

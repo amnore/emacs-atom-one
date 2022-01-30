@@ -1,52 +1,28 @@
 ;;; one-light-lib.el --- Functions for manipulating colors -*- lexical-binding: t; -*-
-;;
-;; Copyright (C) 2022 czg
-;;
-;; Author: czg <https://github.com/czg>
-;; Maintainer: czg <me@markle.one>
-;; Created: January 25, 2022
-;; Modified: January 25, 2022
-;; Version: 0.0.1
-;; Keywords: faces one-light
-;; Homepage: https://github.com/czg/one-light-lib
-;; Package-Requires: ((emacs "24.4"))
-;;
-;; This file is not part of GNU Emacs.
-;;
 ;;; Commentary:
 ;;
-;; Functions used in this file are only used internally
+;; Colors are internally represented in HSL format, as a triple (H S L),
+;; each being a number between 0 and 1.
 ;;
 ;;; Code:
 
 (require 'color)
 (require 'cl-lib)
 (require 'subr-x)
+(eval-when-compile (require 'names))
 
-(defun one-light-lib--mix (color1 color2 &optional weight)
-  "Mix COLOR1 and COLOR2.
-COLOR1 has a weight of WEIGHT, COLOR2 has (1 - WEIGHT).
-If WEIGHT is not specified, default to 0.5."
-  (let ((color1-rgb (apply 'color-hsl-to-rgb color1))
-        (color2-rgb (apply 'color-hsl-to-rgb color2))
-        (w (or weight 0.5)))
-    (apply 'color-rgb-to-hsl
-           (cl-mapcar (lambda (c1 c2) (+ (* c1 w) (* c2 (- 1 w))))
-                      color1-rgb
-                      color2-rgb))))
+(define-namespace one-light--
 
-(defun one-light-lib--luma (color)
-  "Calculate the luma of COLOR."
-  (let* ((rgb (apply 'color-hsl-to-rgb color))
-         (gamma-expand (lambda (u) (if (< u 0.03928)
-                                  (/ u 12.92)
-                                (expt (/ (+ u 0.055) 1.055) 2.4))))
-         (rgb-linear (mapcar gamma-expand rgb)))
-    (cl-reduce '+ (cl-mapcar (lambda (w u) (* w u))
-                             '(0.2126 0.7152 0.0722)
-                             rgb-linear))))
+;;; Color conversion functions
+(defun name-to-hsl (name)
+  "Convert color NAME to HSL format."
+  (apply #'color-rgb-to-hsl (color-name-to-rgb name)))
 
-(defun one-light-lib--color-hsv-to-hsl (color)
+(defun hsl-to-hex (color)
+  "Convert COLOR to hex string."
+  (apply #'color-rgb-to-hex (apply #'color-hsl-to-rgb color)))
+
+(defun hsv-to-hsl (color)
   "Convert hsv COLOR to hsl."
   (let* ((h (nth 0 color))
          (s (nth 1 color))
@@ -58,11 +34,7 @@ If WEIGHT is not specified, default to 0.5."
             (/ (- v l) (min l (- 1 l))))
           l)))
 
-(defun one-light-lib--degree-to-ratio (degree)
-  "Convert DEGREE to its ratio of a circle."
-  (/ degree 360.0))
-
-(defun one-light-lib--color-hex-to-hsl (color)
+(defun hex-to-hsl (color)
   "Convert hex COLOR to hsl, each component can have 1, 2 or 4 digits."
   (let* ((digits (/ (length color) 3))
          (hex-max (- (expt 16.0 digits) 1))
@@ -71,20 +43,71 @@ If WEIGHT is not specified, default to 0.5."
                                       (+ 1 (* digits pos))
                                       (+ 1 (* digits (+ 1 pos))))
                            16))))
-    (apply 'color-rgb-to-hsl
+    (apply #'color-rgb-to-hsl
            (mapcar (lambda (x) (/ x hex-max))
                    (mapcar subhex '(0 1 2))))))
 
-(defun one-light-lib--color-contrast (color &optional dark light threshold)
+(defun degree-to-ratio (degree)
+  "Convert DEGREE to the ratio of a circle."
+  (/ degree 360.0))
+
+;;; Color manipulating functions
+(defun mix (color1 color2 &optional weight)
+  "Mix COLOR1 and COLOR2.
+COLOR1 has a weight of WEIGHT, COLOR2 has (1 - WEIGHT).
+If WEIGHT is not specified, default to 0.5."
+  (let ((color1-rgb (apply #'color-hsl-to-rgb color1))
+        (color2-rgb (apply #'color-hsl-to-rgb color2))
+        (w (or weight 0.5)))
+    (apply #'color-rgb-to-hsl
+           (cl-mapcar (lambda (c1 c2) (+ (* c1 w) (* c2 (- 1 w))))
+                      color1-rgb
+                      color2-rgb))))
+
+(defun contrast (color &optional dark light threshold)
   "Choose between DARK and LIGHT based on the luma value of COLOR.
 If the luma is less than THRESHOLD, choose LIGHT, otherwise choose DARK.
 If THRESHOLD if omitted, use 0.43 by default."
   (let ((black (or dark '(0 0 0)))
         (white (or light '(0 0 1)))
         (thld (or threshold 0.43)))
-    (if (< (one-light-lib--luma color) thld)
+    (if (< (luma color) thld)
         white
       black)))
+
+(defun darken (color ratio)
+  "Darken COLOR by RATIO."
+  (apply #'color-darken-hsl (append color `(,(* ratio 100)))))
+
+(defun lighten (color ratio)
+  "Lighten COLOR by RATIO."
+  (apply #'color-lighten-hsl (append color (list (* ratio 100)))))
+
+;;; Color property functions
+(defun luma (color)
+  "Calculate the luma of COLOR."
+  (let* ((rgb (apply #'color-hsl-to-rgb color))
+         (gamma-expand (lambda (u) (if (< u 0.03928)
+                                  (/ u 12.92)
+                                (expt (/ (+ u 0.055) 1.055) 2.4))))
+         (rgb-linear (mapcar gamma-expand rgb)))
+    (cl-reduce #'+ (cl-mapcar (lambda (w u) (* w u))
+                              '(0.2126 0.7152 0.0722)
+                              rgb-linear))))
+
+(defun hue (color)
+  "Get the hue of COLOR."
+  (nth 0 color))
+
+(defun saturation (color)
+  "Get the saturation of COLOR."
+  (nth 1 color))
+
+(defun lightness (color)
+  "Get the lightness of COLOR."
+  (nth 2 color))
+
+)
 
 (provide 'one-light-lib)
 ;;; one-light-lib.el ends here
