@@ -409,8 +409,9 @@
     (add-hook 'treemacs-mode-hook #'treemacs-setup))
 
   (with-eval-after-load 'company-posframe
-    (plist-put! company-posframe-show-params
-                :border-width 1)
+    (setq company-posframe-show-params
+          (plist-put company-posframe-show-params
+                     :border-width 1))
     (cl-remf company-posframe-quickhelp-show-params
              :border-color))
 
