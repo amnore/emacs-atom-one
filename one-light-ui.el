@@ -387,31 +387,42 @@
     (add-hook
      'treemacs-mode-hook
      (lambda ()
-       (set (make-local-variable 'face-remapping-alist)
-            `((default
-                :foreground ,(to-hex text-color)
-                :background ,(to-hex tree-view-background-color)
-                :height ,(* 10 font-size))
-              (hl-line
-               :foreground ,(to-hex (contrast button-background-color-selected))
-               :background ,(to-hex button-background-color-selected)
-               :extend t)
-              (fringe
-               :foreground ,(to-hex button-background-color-selected)
-               :background ,(to-hex tree-view-background-color))))
-       ;; (treemacs-fringe-indicator-mode -1)
-       ;; (set-window-fringes nil 0 0)
-       (setq line-spacing 5
-             mode-line-format nil)))
+       (setq-local
+        line-spacing 5
+        mode-line-format nil
 
-    ;; (with-eval-after-load 'treemacs
-    ;;   (advice-add #'treemacs-select-window :after
-    ;;               (lambda (&rest _) (set-window-fringes nil 0 0))))
+        face-remapping-alist
+        `((default
+            :foreground ,(to-hex text-color)
+            :background ,(to-hex tree-view-background-color)
+            :height ,(* 10 font-size))
+          (hl-line
+           :foreground ,(to-hex (contrast button-background-color-selected))
+           :background ,(to-hex button-background-color-selected)
+           :extend t)
+          (fringe :background ,(to-hex tree-view-background-color))))
+
+       (treemacs-fringe-indicator-mode -1)
+
+       (let* ((bg-focused (to-hex button-background-color-selected))
+              (bg-unfocused (to-hex background-color-selected))
+              (fg-focused (to-hex (contrast button-background-color-selected)))
+              (treemacs-hl-line (lambda (window)
+                                  (let ((inhibit-redisplay t)
+                                        (focused (treemacs-is-treemacs-window-selected?)))
+                                    (with-selected-window window
+                                      (setcdr (assq 'hl-line face-remapping-alist)
+                                              (if focused
+                                                  (list :foreground fg-focused
+                                                        :background bg-focused
+                                                        :extend t)
+                                                (list :background bg-unfocused
+                                                      :extend t))))))))
+         (add-hook 'window-selection-change-functions treemacs-hl-line 0 t))))
 
     (custom-theme-set-variables
      'one-light
-     `(flycheck-posframe-border-width 1)
-     `(hl-line-sticky-flag nil))
+     `(flycheck-posframe-border-width 1))
 
     (with-eval-after-load 'company-posframe
       (setq company-posframe-show-params '(:border-width 1)
