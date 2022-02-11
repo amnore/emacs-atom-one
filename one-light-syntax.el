@@ -138,6 +138,20 @@
    `(show-paren-match-expression ((,tc (:inherit show-paren-match))))
    `(show-paren-mismatch ((,tc nil)))
 
+   ;; whitespace.el
+   `(whitespace-space ((,tc (:inherit glyphless-char))))
+   `(whitespace-hspace ((,tc (:inherit glyphless-char))))
+   `(whitespace-tab ((,tc (:inherit glyphless-char))))
+   `(whitespace-newline ((,tc (:inherit glyphless-char))))
+   `(whitespace-trailing ((,tc (:inherit glyphless-char))))
+   `(whitespace-line ((,tc nil)))
+   `(whitespace-space-before-tab ((,tc (:inherit glyphless-char))))
+   `(whitespace-indentation ((,tc (:inherit glyphless-char))))
+   `(whitespace-big-indent ((,tc (:inherit glyphless-char))))
+   `(whitespace-missing-newline-at-eof ((,tc (:inherit glyphless-char))))
+   `(whitespace-empty ((,tc (:inherit glyphless-char))))
+   `(whitespace-space-after-tab ((,tc (:inherit glyphless-char))))
+
    ;; hl-line.el
    `(hl-line ((,tc (:background ,(hsl-to-hex syntax-cursor-line)))))
 
