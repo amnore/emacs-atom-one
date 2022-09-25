@@ -22,6 +22,15 @@
 (defface lsp-face-semhl-documentation nil
   "LSP face for documentation modifier.")
 
+(defface font-lock-member-face nil
+  "Font lock face used to highlight member variables.")
+
+(defface font-lock-tag-face nil
+  "Font lock face used to highlight xml tags.")
+
+(defface font-lock-attribute-face nil
+  "Font lock face used to highlight xml attributes.")
+
 (define-namespace one-light-- :global t
 
 (let* (;;; colors.less
@@ -201,13 +210,19 @@
    `(font-lock-regexp-grouping-construct
      ((,tc (:foreground ,(hsl-to-hex hue-3)))))
                                         ; base.less: syntax--regex.syntax--punctuation
+   `(font-lock-member-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))
+                                        ; base.less: .syntax--variable
+   `(font-lock-tag-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))
+                                        ; base.less: .syntax--entity.syntax--span
+   `(font-lock-attribute-face ((,tc (:foreground ,(hsl-to-hex hue-6)))))
+                                        ; base.less: .syntax--entity.syntax--attribute
 
    ;; lsp-semantic-tokens.el
    `(lsp-face-semhl-namespace ((,tc (:inherit lsp-face-semhl-constant))))
    `(lsp-face-semhl-regexp ((,tc (:inherit lsp-face-semhl-string))))
    `(lsp-face-semhl-operator ((,tc (:inherit lsp-face-semhl-keyword))))
    `(lsp-face-semhl-enum ((,tc (:inherit lsp-face-semhl-type))))
-   `(lsp-face-semhl-member ((,tc (:foreground ,(hsl-to-hex hue-5)))))
+   `(lsp-face-semhl-member ((,tc (:inherit font-lock-member-face))))
                                         ; base.less: .syntax--variable
    `(lsp-face-semhl-property
      ((,tc (:inherit lsp-face-semhl-member))))
@@ -225,6 +240,46 @@
    `(lsp-face-semhl-modification ((,tc nil)))
    `(lsp-face-semhl-documentation ((,tc nil)))
    `(lsp-face-semhl-default-library ((,tc nil)))
+
+   ;; tree-sitter-hl.el
+   `(tree-sitter-hl-face:function ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:function.call ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:function.builtin ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:function.special ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:function.macro ((,tc (:inherit font-lock-keyword-face))))
+   `(tree-sitter-hl-face:method ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:method.call ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:type ((,tc (:inherit font-lock-type-face))))
+   `(tree-sitter-hl-face:type.parameter ((,tc (:inherit font-lock-type-face))))
+   `(tree-sitter-hl-face:type.argument ((,tc (:inherit font-lock-type-face))))
+   `(tree-sitter-hl-face:type.builtin ((,tc (:inherit font-lock-type-face))))
+   `(tree-sitter-hl-face:type.super ((,tc (:inherit font-lock-type-face))))
+   `(tree-sitter-hl-face:constructor ((,tc (:inherit font-lock-function-name-face))))
+   `(tree-sitter-hl-face:variable ((,tc (:inherit font-lock-variable-name-face))))
+   `(tree-sitter-hl-face:variable.parameter ((,tc (:inherit font-lock-variable-name-face))))
+   `(tree-sitter-hl-face:variable.builtin ((,tc (:inherit font-lock-variable-name-face))))
+   `(tree-sitter-hl-face:variable.special ((,tc (:inherit font-lock-variable-name-face))))
+   `(tree-sitter-hl-face:property ((,tc (:inherit (:inherit font-lock-member-face)))))
+   `(tree-sitter-hl-face:property.definition ((,tc (:inherit font-lock-member-face))))
+   `(tree-sitter-hl-face:comment ((,tc (:inherit font-lock-comment-face))))
+   `(tree-sitter-hl-face:doc ((,tc (:inherit font-lock-doc-face))))
+   `(tree-sitter-hl-face:string ((,tc (:inherit font-lock-string-face))))
+   `(tree-sitter-hl-face:string.special ((,tc (:inherit font-lock-string-face))))
+   `(tree-sitter-hl-face:escape ((,tc (:foreground "red"))))
+   `(tree-sitter-hl-face:embedded ((,tc (:foreground "red"))))
+   `(tree-sitter-hl-face:keyword ((,tc (:inherit font-lock-keyword-face))))
+   `(tree-sitter-hl-face:operator ((,tc (:inherit font-lock-keyword-face))))
+   `(tree-sitter-hl-face:label ((,tc (:foreground "red"))))
+   `(tree-sitter-hl-face:constant ((,tc (:inherit font-lock-constant-face))))
+   `(tree-sitter-hl-face:constant.builtin ((,tc (:inherit font-lock-constant-face))))
+   `(tree-sitter-hl-face:number ((,tc (:inherit font-lock-constant-face))))
+   `(tree-sitter-hl-face:punctuation ((,tc nil)))
+   `(tree-sitter-hl-face:punctuation.bracket ((,tc nil)))
+   `(tree-sitter-hl-face:punctuation.delimiter ((,tc nil)))
+   `(tree-sitter-hl-face:punctuation.special ((,tc nil)))
+   `(tree-sitter-hl-face:tag ((,tc (:inherit font-lock-tag-face))))
+   `(tree-sitter-hl-face:attribute ((,tc (:inherit font-lock-attribute-face))))
+   `(tree-sitter-hl-face:noise ((,tc (:foreground "red"))))
 
    ;; button.el
    `(button ((,tc (:inherit underline))))
@@ -246,11 +301,11 @@
    `(web-mode-symbol-face ((,tc (:inherit font-lock-variable-name-face))))
    `(web-mode-doctype-face ((,tc (:foreground ,(hsl-to-hex mono-1)))))
                                         ; syntax-legacy/_base.less: .syntax--meta.syntax--tag
-   `(web-mode-html-tag-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))
+   `(web-mode-html-tag-face ((,tc (:inherit font-lock-tag-face))))
                                         ; base.less: .syntax--entity.syntax--span
    `(web-mode-html-tag-bracket-face ((,tc (:foreground ,(hsl-to-hex mono-1)))))
                                         ; base.less: .syntax--punctuation
-   `(web-mode-html-attr-name-face ((,tc (:foreground ,(hsl-to-hex hue-6)))))
+   `(web-mode-html-attr-name-face ((,tc (:inherit font-lock-attribute-face))))
                                         ; base.less: .syntax--entity.syntax--attribute
    `(web-mode-html-attr-engine-face
      ((,tc (:inherit web-mode-html-attr-name-face))))
