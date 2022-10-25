@@ -205,10 +205,10 @@
    `(font-lock-negation-char-face ((,tc (:foreground ,(hsl-to-hex hue-3)))))
                                         ; base.less: .syntax--operator
    `(font-lock-regexp-grouping-backslash
-     ((,tc (:foreground ,(hsl-to-hex hue-3)))))
+     ((,tc (:foreground ,(hsl-to-hex hue-1)))))
                                         ; base.less: syntax--regex.syntax--punctuation
    `(font-lock-regexp-grouping-construct
-     ((,tc (:foreground ,(hsl-to-hex hue-3)))))
+     ((,tc (:foreground ,(hsl-to-hex hue-1)))))
                                         ; base.less: syntax--regex.syntax--punctuation
    `(font-lock-member-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))
                                         ; base.less: .syntax--variable
@@ -265,11 +265,11 @@
    `(tree-sitter-hl-face:doc ((,tc (:inherit font-lock-doc-face))))
    `(tree-sitter-hl-face:string ((,tc (:inherit font-lock-string-face))))
    `(tree-sitter-hl-face:string.special ((,tc (:inherit font-lock-string-face))))
-   `(tree-sitter-hl-face:escape ((,tc (:foreground "red"))))
-   `(tree-sitter-hl-face:embedded ((,tc (:foreground "red"))))
+   `(tree-sitter-hl-face:escape ((,tc (:inherit font-lock-regexp-grouping-backslash))))
+   `(tree-sitter-hl-face:embedded ((,tc nil)))
    `(tree-sitter-hl-face:keyword ((,tc (:inherit font-lock-keyword-face))))
    `(tree-sitter-hl-face:operator ((,tc (:inherit font-lock-keyword-face))))
-   `(tree-sitter-hl-face:label ((,tc (:foreground "red"))))
+   `(tree-sitter-hl-face:label ((,tc (:inherit font-lock-member-face))))
    `(tree-sitter-hl-face:constant ((,tc (:inherit font-lock-constant-face))))
    `(tree-sitter-hl-face:constant.builtin ((,tc (:inherit font-lock-constant-face))))
    `(tree-sitter-hl-face:number ((,tc (:inherit font-lock-constant-face))))
@@ -318,7 +318,24 @@
                                         ; css.less: .syntax--css.syntax--constant.syntax--color
    `(web-mode-css-priority-face ((,tc (:inherit font-lock-keyword-face))))
    `(web-mode-css-function-face ((,tc (:inherit font-lock-function-name-face))))
-   `(web-mode-css-variable-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))))
+   `(web-mode-css-variable-face ((,tc (:foreground ,(hsl-to-hex hue-5)))))
+
+   `(ansi-color-black ((,tc :foreground ,(hsl-to-hex mono-1) :background ,(hsl-to-hex mono-1))))
+   `(ansi-color-red ((,tc :foreground ,(hsl-to-hex hue-5-2) :background ,(hsl-to-hex hue-5-2))))
+   `(ansi-color-green ((,tc :foreground ,(hsl-to-hex hue-4) :background ,(hsl-to-hex hue-4))))
+   `(ansi-color-yellow ((,tc :foreground ,(hsl-to-hex hue-6) :background ,(hsl-to-hex hue-6))))
+   `(ansi-color-blue ((,tc :foreground ,(hsl-to-hex hue-2) :background ,(hsl-to-hex hue-2))))
+   `(ansi-color-magenta ((,tc :foreground ,(hsl-to-hex hue-3) :background ,(hsl-to-hex hue-3))))
+   `(ansi-color-cyan ((,tc :foreground ,(hsl-to-hex hue-1) :background ,(hsl-to-hex hue-1))))
+   `(ansi-color-white ((,tc :foreground ,(hsl-to-hex mono-3) :background ,(hsl-to-hex mono-3))))
+   `(ansi-color-bright-black ((,tc :foreground ,(hsl-to-hex mono-2) :background ,(hsl-to-hex mono-2))))
+   `(ansi-color-bright-red ((,tc :foreground ,(hsl-to-hex hue-5) :background ,(hsl-to-hex hue-5))))
+   `(ansi-color-bright-green ((,tc :foreground ,(hsl-to-hex hue-4) :background ,(hsl-to-hex hue-4))))
+   `(ansi-color-bright-yellow ((,tc :foreground ,(hsl-to-hex hue-6-2) :background ,(hsl-to-hex hue-6-2))))
+   `(ansi-color-bright-blue ((,tc :foreground ,(hsl-to-hex hue-2) :background ,(hsl-to-hex hue-2))))
+   `(ansi-color-bright-magenta ((,tc :foreground ,(hsl-to-hex hue-3) :background ,(hsl-to-hex hue-3))))
+   `(ansi-color-bright-cyan ((,tc :foreground ,(hsl-to-hex hue-1) :background ,(hsl-to-hex hue-1))))
+   `(ansi-color-bright-white ((,tc :foreground ,(hsl-to-hex syntax-bg) :background ,(hsl-to-hex syntax-bg))))))
 
 (with-eval-after-load 'lsp-semantic-tokens
   (setq lsp-semantic-token-modifier-faces
