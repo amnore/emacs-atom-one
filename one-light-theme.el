@@ -1,23 +1,32 @@
 ;;; one-light-theme.el --- Port of Atom One Light -*- lexical-binding: t -*-
 ;;
-;; Copyright (C) 2022 Chen Zhenge
+;; Copyright (C) 2024 amnore
 ;;
-;; Author: Chen Zhenge <me@markle.one>
+;; Author: amnore <me@markle.one>
 ;; URL: https://github.com/amnore/emacs-one-light-port
 ;; Keywords: faces one-light
-;; Version: 0.0.1
-;; Package-Requires: ((emacs "25.1") (names "20180321.1155"))
+;; Version: 0.0.2
+;; Package-Requires: ((emacs "25.1") (names "20180321.1155") (load-relative "1.3.2"))
 ;;
 ;;; Commentary:
 ;;
 ;; Yet another port of Atom's One Light theme
 ;;
 ;;; Code:
+
+(require 'load-relative)
+(require-relative 'one-light-lib)
+
 (deftheme one-light
   "Yet another port of Atom's One Light theme.")
 
-(require 'one-light-syntax)
-(require 'one-light-ui)
+(let ((syntax-theme-files '("colors" "base" "latex" "lsp" "misc" "term" "tree-sitter" "web"))
+      (ui-theme-files '("colors" "base" "company" "flycheck" "misc" "modeline" "treemacs")))
+  (load-relative (mapcar (lambda (file) (concat "syntax/" file))
+                         syntax-theme-files))
+  (load-relative (mapcar (lambda (file) (concat "ui/" file))
+                         ui-theme-files)))
+
 
 ;;;###autoload
 (when (and (boundp 'custom-theme-load-path) load-file-name)
