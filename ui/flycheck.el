@@ -17,13 +17,13 @@
  ;; flycheck.el
  `(flycheck-error
    ((t (:underline (:style wave
-                      :color ,(hsl-to-hex text-color-error))))))
+                    :color ,(hsl-to-hex text-color-error))))))
  `(flycheck-warning
    ((t (:underline (:style wave
-                      :color ,(hsl-to-hex text-color-warning))))))
+                    :color ,(hsl-to-hex text-color-warning))))))
  `(flycheck-info
    ((t (:underline (:style wave
-                      :color ,(hsl-to-hex text-color-info))))))
+                    :color ,(hsl-to-hex text-color-info))))))
  `(flycheck-fringe-error ((t (:inherit error))))
  `(flycheck-fringe-warning ((t (:inherit warning))))
  `(flycheck-fringe-info ((t (:inherit info))))
@@ -39,12 +39,32 @@
  ;; flycheck-posframe.el
  `(flycheck-posframe-face
    ((t (:foreground ,(hsl-to-hex text-color)
-          :background ,(hsl-to-hex overlay-background-color)))))
+        :background ,(hsl-to-hex overlay-background-color)))))
  `(flycheck-posframe-info-face ((t (:inherit (info flycheck-posframe-face)))))
  `(flycheck-posframe-warning-face ((t (:inherit (warning flycheck-posframe-face)))))
  `(flycheck-posframe-error-face ((t (:inherit (error flycheck-posframe-face)))))
  `(flycheck-posframe-background-face ((t (:background ,(hsl-to-hex overlay-background-color)))))
  `(flycheck-posframe-border-face ((t (:foreground ,(hsl-to-hex overlay-border-color)))))
+
+ ;; compilation.el
+ `(compilation-info ((t (:inherit info))))
+
+ ;; flymake.el
+ `(flymake-error
+   ((t (:underline (:style wave
+                    :color ,(hsl-to-hex text-color-error))))))
+ `(flymake-warning
+   ((t (:underline (:style wave
+                    :color ,(hsl-to-hex text-color-warning))))))
+ `(flymake-note
+   ((t (:underline (:style wave
+                    :color ,(hsl-to-hex text-color-info))))))
+
+ ;; flymake-popon.el
+ `(flymake-popon
+   ((t (:foreground ,(hsl-to-hex text-color)
+        :background ,(hsl-to-hex overlay-background-color)))))
+ `(flymake-popon-posframe-border ((t (:foreground ,(hsl-to-hex overlay-border-color)))))
  )
 
 (custom-theme-set-variables

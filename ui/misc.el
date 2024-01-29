@@ -15,9 +15,9 @@
 
  ;; popup.el
  `(popup-face ((t (:foreground ,(hsl-to-hex text-color)
-                     :background ,(hsl-to-hex overlay-background-color)))))
+                   :background ,(hsl-to-hex overlay-background-color)))))
  `(popup-summary-face ((t (:inherit popup-face
-                             :foreground ,(hsl-to-hex text-color-subtle)))))
+                           :foreground ,(hsl-to-hex text-color-subtle)))))
  `(popup-scroll-bar-foreground-face
    ((t (:background ,(hsl-to-hex scrollbar-color)))))
  `(popup-scroll-bar-background-face
@@ -28,8 +28,8 @@
  `(popup-menu-mouse-face ((t nil)))
  `(popup-menu-selection-face
    ((t (:foreground ,(hsl-to-hex text-color-selected)
-          :background ,(hsl-to-hex (mix text-color-highlight
-                                        overlay-background-color))))))
+        :background ,(hsl-to-hex (mix text-color-highlight
+                                      overlay-background-color))))))
  `(popup-menu-summary-face ((t (:inherit popup-summary-face))))
  )
 

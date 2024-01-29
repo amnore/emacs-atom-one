@@ -15,10 +15,10 @@
 
  ;; faces.el
  `(default ((t (:foreground ,(hsl-to-hex syntax-text-color)
-                  :background ,(hsl-to-hex syntax-background-color)))))
+                :background ,(hsl-to-hex syntax-background-color)))))
  ;; `(shadow ((t (:foreground ,(hsl-to-hex text-color-subtle)))))
  `(link ((t (:inherit underline
-               :foreground ,(hsl-to-hex hue-1)))))
+             :foreground ,(hsl-to-hex hue-1)))))
  `(link-visited ((t (:inherit link))))
  `(highlight ((t (:background ,(hsl-to-hex syntax-selection-color)))))
  `(region ((t (:background ,(hsl-to-hex syntax-selection-color)))))
@@ -54,8 +54,8 @@
  ;; isearch.el
  `(isearch
    ((t (:inherit lazy-highlight
-          :box (:line-width 2
-                :color ,(hsl-to-hex syntax-result-marker-color-selected))))))
+        :box (:line-width 2
+              :color ,(hsl-to-hex syntax-result-marker-color-selected))))))
  `(lazy-highlight
    ((t (:background ,(hsl-to-hex syntax-result-marker-color)))))
 
@@ -68,7 +68,7 @@
  `(font-lock-variable-name-face ((t (:foreground ,(hsl-to-hex mono-1)))))
  `(font-lock-keyword-face ((t (:foreground ,(hsl-to-hex hue-3)))))
  `(font-lock-comment-face ((t (:foreground ,(hsl-to-hex mono-3)
-                                 :slant italic))))
+                               :slant italic))))
  `(font-lock-comment-delimiter-face ((t (:inherit font-lock-comment-face))))
  `(font-lock-type-face ((t (:foreground ,(hsl-to-hex hue-1)))))
  `(font-lock-constant-face ((t (:foreground ,(hsl-to-hex hue-6)))))
@@ -78,7 +78,7 @@
  `(font-lock-string-face ((t (:foreground ,(hsl-to-hex hue-4)))))
  `(font-lock-doc-face ((t (:inherit font-lock-comment-face))))
  `(font-lock-doc-markup-face ((t (:foreground ,(hsl-to-hex (lighten mono-3 0.06))
-                                    :weight bold))))
+                                  :weight bold))))
  `(font-lock-negation-char-face ((t (:foreground ,(hsl-to-hex hue-3)))))
  `(font-lock-regexp-grouping-backslash ((t (:foreground ,(hsl-to-hex hue-1)))))
  `(font-lock-regexp-grouping-construct ((t (:foreground ,(hsl-to-hex hue-1)))))

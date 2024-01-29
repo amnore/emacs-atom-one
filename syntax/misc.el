@@ -15,7 +15,7 @@
 
  ;; hl-todo.el
  `(hl-todo ((t (:foreground ,(hsl-to-hex (lighten mono-3 0.06))
-                  :weight bold))))
+                :weight bold))))
 
  ;; mmm-vars.el
  `(mmm-default-submode-face ((t ())))

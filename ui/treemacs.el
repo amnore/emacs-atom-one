@@ -20,17 +20,17 @@
  `(treemacs-root-face ((t (:inherit treemacs-directory-face))))
  `(treemacs-git-modified-face
    ((t (:inherit treemacs-file-face
-          :foreground ,(hsl-to-hex text-color-modified)))))
+        :foreground ,(hsl-to-hex text-color-modified)))))
  `(treemacs-git-renamed-face
    ((t (:inherit treemacs-file-face
-          :foreground ,(hsl-to-hex text-color-renamed)))))
+        :foreground ,(hsl-to-hex text-color-renamed)))))
  `(treemacs-git-ignored-face
    ((t (:inherit treemacs-file-face
-          :foreground ,(hsl-to-hex text-color-ignored)))))
+        :foreground ,(hsl-to-hex text-color-ignored)))))
  `(treemacs-git-untracked-face ((t (:inherit treemacs-git-added-face))))
  `(treemacs-git-added-face
    ((t (:inherit treemacs-file-face
-          :foreground ,(hsl-to-hex text-color-added)))))
+        :foreground ,(hsl-to-hex text-color-added)))))
  )
 
 (defun treemacs-change-hl-line (window)

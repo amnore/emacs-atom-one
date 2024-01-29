@@ -130,7 +130,10 @@
  progress-background-color accent-color
  scrollbar-color (darken level-3-color 0.14)
  scrollbar-background-color level-3-color
- scroll-bar-color-editor ui-syntax-color
+ scrollbar-color-editor (contrast ui-syntax-color
+                                  (darken ui-syntax-color 0.14)
+                                  (lighten ui-syntax-color 0.09))
+ scrollbar-background-color-editor ui-syntax-color
  tab-text-color text-color-subtle
  tab-text-color-active text-color-highlight
  tab-text-color-editor (contrast ui-syntax-color
