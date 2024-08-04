@@ -22,10 +22,6 @@
  'one-light
 
    ;; faces.el
- `(mode-line ((t (:background ,(hsl-to-hex level-3-color)))))
- `(mode-line-inactive ((t (:foreground ,(hsl-to-hex tab-text-color)))))
- `(mode-line-highlight ((t (:background ,(hsl-to-hex level-3-color-hover)))))
- `(mode-line-buffer-id ((t (:inherit mode-line))))
  `(header-line ((t (:foreground ,(hsl-to-hex text-color-subtle)
                     :background ,(hsl-to-hex base-background-color)))))
  `(header-line-highlight ((t (:inherit header-line :underline t))))

@@ -6,7 +6,7 @@
 ;; URL: https://github.com/amnore/emacs-one-light-port
 ;; Keywords: faces one-light
 ;; Version: 0.0.2
-;; Package-Requires: ((emacs "25.1") (names "20180321.1155") (load-relative "1.3.2"))
+;; Package-Requires: ((emacs "25.1") (names "20180321.1155") (load-relative "1.3.2") (nerd-icons "0.1.0"))
 ;;
 ;;; Commentary:
 ;;
@@ -20,8 +20,9 @@
 (deftheme one-light
   "Yet another port of Atom's One Light theme.")
 
-(let ((syntax-theme-files '("colors" "base" "latex" "lsp" "misc" "term" "tree-sitter" "web"))
-      (ui-theme-files '("colors" "base" "company" "flycheck" "misc" "modeline" "treemacs")))
+(let ((syntax-theme-files '("base" "latex" "lsp" "misc" "term" "tree-sitter" "web"))
+      (ui-theme-files '("base" "company" "flycheck" "misc" "modeline" "treemacs")))
+  (load-relative '("syntax/colors" "ui/colors"))
   (load-relative (mapcar (lambda (file) (concat "syntax/" file))
                          syntax-theme-files))
   (load-relative (mapcar (lambda (file) (concat "ui/" file))

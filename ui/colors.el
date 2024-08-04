@@ -11,7 +11,7 @@
 
 (define-namespace one-light-- :global t
 
-(setq
+(setcolor
  ui-syntax-color `(,(degree-to-ratio 230) 0.01 0.98)
  ui-hue (if-let* ((ui-s-h (hue ui-syntax-color))
                   (no-hue (= 0 (hue ui-syntax-color))))

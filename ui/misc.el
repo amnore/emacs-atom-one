@@ -5,6 +5,7 @@
 ;;; Commentary:
 ;;
 ;;  Colors for misc. packages
+;;  Source: https://github.com/pulsar-edit/pulsar/blob/master/packages/one-light-ui/styles/tabs.less
 ;;
 ;;; Code:
 
@@ -31,8 +32,24 @@
         :background ,(hsl-to-hex (mix text-color-highlight
                                       overlay-background-color))))))
  `(popup-menu-summary-face ((t (:inherit popup-summary-face))))
- )
 
+ ;; faces.el
+ `(tab-line ((t (:background ,(hsl-to-hex tab-bar-background-color)))))
+ ;; tab-line.el
+ `(tab-line-tab ((t (:foreground ,(hsl-to-hex tab-text-color-active)
+                     :background ,(hsl-to-hex tab-background-color-active)))))
+ `(tab-line-tab-inactive ((t (:foreground ,(hsl-to-hex tab-text-color)
+                              :background ,(hsl-to-hex tab-background-color)))))
+ `(tab-line-tab-inactive-alternate ((t (:inherit tab-line-tab-inactive))))
+ `(tab-line-tab-special ((t (:slant italic))))
+ `(tab-line-tab-modified ((t)))
+ `(tab-line-tab-group ((t)))
+ `(tab-line-tab-current ((t (:foreground ,(hsl-to-hex tab-text-color-active)
+                             :background ,(hsl-to-hex tab-background-color-active)))))
+ `(tab-line-highlight ((t)))
+ `(tab-line-close-highlight ((t (:foreground ,(hsl-to-hex accent-text-color)
+                                 :background ,(hsl-to-hex accent-color)))))
+ )
 )
 
 ;;; misc.el ends here

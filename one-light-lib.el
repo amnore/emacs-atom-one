@@ -13,6 +13,20 @@
 
 (define-namespace one-light--
 
+(defmacro setcolor (&rest pairs)
+  "Set VARIABLE/VALUE pairs in the `one-light--' namespace.
+
+\(fn [VARIABLE VALUE]...)"
+  (declare (debug setq))
+  (let (expr)
+    (while pairs
+      (push `(defvar
+               ,(intern (concat "one-light--" (symbol-name (car pairs))))
+               (define-namespace one-light-- :global t ,(cadr pairs)))
+            expr)
+      (setq pairs (cddr pairs)))
+    `(progn ,@(nreverse expr))))
+
 ;;; Color conversion functions
 (defun name-to-hsl (name)
   "Convert color NAME to HSL format."
@@ -47,6 +61,18 @@
            (mapcar (lambda (x) (/ x hex-max))
                    (mapcar subhex '(0 1 2))))))
 
+(defun hsl-to-hsv (color)
+  "Convert hsl COLOR to hsv."
+  (let* ((h (nth 0 color))
+         (s (nth 1 color))
+         (l (nth 2 color))
+         (v (+ l (* s (min l (- 1 l))))))
+    (list h
+          (if (= v 0)
+              0
+            (* 2 (- 1 (/ l v))))
+          v)))
+
 (defun degree-to-ratio (degree)
   "Convert DEGREE to the ratio of a circle."
   (/ degree 360.0))
@@ -75,13 +101,15 @@ If THRESHOLD if omitted, use 0.43 by default."
         white
       black)))
 
-(defun darken (color ratio)
-  "Darken COLOR by RATIO."
-  (apply #'color-darken-hsl (append color `(,(* ratio 100)))))
+(defun darken (color amount)
+  "Darken COLOR by AMOUNT."
+  (list (nth 0 color)
+        (nth 1 color)
+        (color-clamp (- (nth 2 color) amount))))
 
-(defun lighten (color ratio)
-  "Lighten COLOR by RATIO."
-  (apply #'color-lighten-hsl (append color (list (* ratio 100)))))
+(defun lighten (color amount)
+  "Lighten COLOR by AMOUNT, relatively if RELATIVE is non-nil."
+  (darken color (- amount)))
 
 ;;; Color property functions
 (defun luma (color)
@@ -106,6 +134,10 @@ If THRESHOLD if omitted, use 0.43 by default."
 (defun lightness (color)
   "Get the lightness of COLOR."
   (nth 2 color))
+
+(defun hsvvalue (color)
+  "Get the v value in hsv of COLOR."
+  (nth 2 (hsl-to-hsv color)))
 
 )
 

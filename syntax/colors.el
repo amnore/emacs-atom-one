@@ -11,7 +11,7 @@
 
 (define-namespace one-light-- :global t
 
-(setq
+(setcolor
  ;; Config
  syntax-hue (degree-to-ratio 230)
  syntax-saturation 0.01
